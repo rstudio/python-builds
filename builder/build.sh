@@ -34,7 +34,7 @@ upload_python() {
 
 # archive_python() - $1 as python version
 archive_python() {
-  tar cvzf /tmp/${TARBALL_NAME} --directory=/opt/python ${1} --owner=0 --group=0
+  tar czf /tmp/${TARBALL_NAME} --directory=/opt/python ${1} --owner=0 --group=0
 }
 
 # fetch_python_source() - $1 as python version

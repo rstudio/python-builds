@@ -40,7 +40,7 @@ serverless-deploy.%: deps fetch-serverless-custom-file
 	$(SLS_BINARY) deploy --stage $*
 
 # Helper for launching a bash session on a docker image of your choice. Defaults
-# to "ubuntu:xenial".
+# to "ubuntu:focal".
 TARGET_IMAGE?=ubuntu:focal
 bash:
 	docker run --privileged=true -it --rm \

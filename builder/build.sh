@@ -63,7 +63,7 @@ compile_python() {
   make install
   wget -q https://bootstrap.pypa.io/get-pip.py
   /opt/python/${VERSION}/bin/python${PYTHON_MAJOR} get-pip.py
-  /opt/python/${VERSION}/bin/pip install virtualenv==16.1.0
+  /opt/python/${VERSION}/bin/pip install virtualenv
 }
 
 set_up_environment() {

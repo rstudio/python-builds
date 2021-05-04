@@ -1,0 +1,14 @@
+version: '2.0'
+
+services:
+  ubuntu-2004:
+    command: ./build.sh
+    environment:
+      - PYTHON_VERSION=${PYTHON_VERSION}
+      - LOCAL_STORE=/tmp/output
+    build:
+      context: .
+      dockerfile: Dockerfile.ubuntu-2004
+    image: python-builds:ubuntu-2004
+    volumes:
+      - ./integration/tmp:/tmp/output

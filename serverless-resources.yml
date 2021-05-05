@@ -1,0 +1,185 @@
+# s3 bucket
+S3Bucket:
+  Type: AWS::S3::Bucket
+  Properties:
+    BucketName: ${self:custom.${self:provider.stage}.s3Bucket}
+
+pythonBuildsBatchIamRole:
+  Type: AWS::IAM::Role
+  Properties:
+    Path: /service-role/
+    AssumeRolePolicyDocument:
+      Version: '2012-10-17'
+      Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+              - batch.amazonaws.com
+          Action: sts:AssumeRole
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/service-role/AWSBatchServiceRole
+pythonBuildsSpotFleetIamRole:
+  Type: AWS::IAM::Role
+  Properties:
+    Path: /service-role/
+    AssumeRolePolicyDocument:
+      Version: '2012-10-17'
+      Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+              - spotfleet.amazonaws.com
+          Action: sts:AssumeRole
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/service-role/AmazonEC2SpotFleetTaggingRole
+pythonBuildsInstanceIamRole:
+  Type: AWS::IAM::Role
+  Properties:
+    AssumeRolePolicyDocument:
+      Version: '2012-10-17'
+      Statement:
+        - Effect: 'Allow'
+          Principal:
+            Service:
+              - 'ec2.amazonaws.com'
+          Action:
+            - 'sts:AssumeRole'
+    Path: '/'
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role
+
+pythonBuildsIamInstanceProfile:
+  Type: AWS::IAM::InstanceProfile
+  Properties:
+    Path: '/'
+    Roles:
+      - Ref: pythonBuildsInstanceIamRole
+pythonBuildsEcsTaskIamRole:
+  Type: AWS::IAM::Role
+  Properties:
+    Path: /service-role/
+    AssumeRolePolicyDocument:
+      Version: '2012-10-17'
+      Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+              - ecs-tasks.amazonaws.com
+          Action: sts:AssumeRole
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+    Policies:
+      - PolicyName: 's3-python-builds-bucket'
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - s3:*
+              Resource:
+                - arn:aws:s3:::${self:custom.${self:provider.stage}.s3Bucket}
+                - arn:aws:s3:::${self:custom.${self:provider.stage}.s3Bucket}/*
+
+pythonBuildsEcsLaunchTemplate:
+  Type: AWS::EC2::LaunchTemplate
+  Properties:
+    LaunchTemplateName: python-builds-${self:provider.stage}-batch-managed-ecs-larger-volume
+    LaunchTemplateData:
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: gp3
+            VolumeSize: 64
+
+pythonBuildsBatchComputeEnvironment:
+  Type: AWS::Batch::ComputeEnvironment
+  DependsOn: pythonBuildsBatchIamRole
+  Properties:
+    Type: MANAGED
+    ServiceRole:
+      "Fn::GetAtt": [ pythonBuildsBatchIamRole, Arn ]
+    ComputeResources:
+      Ec2Configuration:
+        - ImageType: ECS_AL2
+      LaunchTemplate:
+        LaunchTemplateId:
+          Ref: pythonBuildsEcsLaunchTemplate
+      SpotIamFleetRole:
+        "Fn::GetAtt": [ pythonBuildsSpotFleetIamRole, Arn ]
+      SecurityGroupIds: ${self:custom.securityGroupIds}
+      Subnets: ${self:custom.subnets}
+      Type: SPOT
+      BidPercentage: 85
+      InstanceRole:
+        "Fn::GetAtt": [ pythonBuildsIamInstanceProfile, Arn ]
+      InstanceTypes:
+        - m5
+        - r5
+      Ec2KeyPair: ${self:custom.ec2KeyPair}
+      Tags: ${self:provider.stackTags}
+      MinvCpus: 0
+      DesiredvCpus: 0
+      MaxvCpus: 256
+
+pythonBuildsBatchJobQueue:
+  Type: AWS::Batch::JobQueue
+  Properties:
+    ComputeEnvironmentOrder:
+      - Order: 1
+        ComputeEnvironment:
+          Ref: pythonBuildsBatchComputeEnvironment
+    State: ENABLED
+    Priority: 1
+
+pythonBuildsBatchJobDefinitionUbuntu2004:
+  Type: AWS::Batch::JobDefinition
+  Properties:
+    Type: container
+    ContainerProperties:
+      Command:
+        - ./build.sh
+      Vcpus: 4
+      Memory: 4096
+      JobRoleArn:
+        "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
+      Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:ubuntu-2004"
+    Timeout:
+      AttemptDurationSeconds: 7200
+
+# step function cloudwatch event trigger resources
+pythonBuildsEventRuleIamRole:
+  Type: AWS::IAM::Role
+  Properties:
+    Path: /service-role/
+    AssumeRolePolicyDocument:
+      Version: '2012-10-17'
+      Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+              - events.amazonaws.com
+          Action: sts:AssumeRole
+    Policies:
+      - PolicyName: 'allow-step-function-execution'
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - states:StartExecution
+              Resource:
+                Ref: PythonBuildsStepFunction
+
+pythonBuildsEventRule:
+  Type: AWS::Events::Rule
+  Properties:
+    Description: Check for New python Versions
+    ScheduleExpression: rate(1 hour)
+    State: ${self:custom.${self:provider.stage}.eventRuleState}
+    Targets:
+      - Id: pythonbuilds
+        Input: '{}'
+        RoleArn:
+          Fn::GetAtt: [ pythonBuildsEventRuleIamRole, Arn ]
+        Arn:
+          Ref: PythonBuildsStepFunction

@@ -32,9 +32,9 @@ def _valid_python_version(version):
     return False
 
 
-def _python_versions(url):
-    """Perform a lookup of CRAN-known R version."""
-    r = requests.get(url)
+def _python_versions():
+    """Perform a lookup of python.com known versions."""
+    r = requests.get(PYTHON_SRC_URL)
     soup = BeautifulSoup(r.text, 'html.parser')
     python_versions = []
     for link in soup.find_all('a'):

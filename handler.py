@@ -1,12 +1,12 @@
-import os
 from bs4 import BeautifulSoup
-import requests
-import json
 import boto3
 import botocore
+import json
+import os
+import requests
 
-PYTHON_SRC_URL='https://www.python.org/ftp/python/'
-PYTHON_MINOR_VERSIONS=['3.8', '3.9']
+PYTHON_SRC_URL = 'https://www.python.org/ftp/python/'
+PYTHON_MINOR_VERSIONS = ['3.7', '3.8', '3.9']
 batch_client = boto3.client('batch', region_name='us-east-1')
 
 
@@ -25,7 +25,7 @@ def _persist_python_versions(data):
 
 
 def _valid_python_version(version):
-    """Determine if this is a valid python version from PYTHON_MAJOR_VERSIONS"""
+    """Determine if this is a valid python version from PYTHON_MINOR_VERSIONS"""
     for minor_version in PYTHON_MINOR_VERSIONS:
         if version.startswith(minor_version):
             return True
@@ -66,7 +66,7 @@ def _versions_to_build(force, versions):
     python_versions = _python_versions()['python_versions']
     if versions:
         python_versions = [v for v in python_versions if v in versions]
-    known_versions = _known_python_versions()['r_versions']
+    known_versions = _known_python_versions()['python_versions']
     new_versions = _compare_versions(python_versions, known_versions)
 
     if len(new_versions) > 0:
@@ -83,7 +83,7 @@ def _container_overrides(version):
     """Generate container override parameter for jobs."""
     overrides = {}
     overrides['environment'] = [
-        {'name': 'R_VERSION', 'value': version},
+        {'name': 'PYTHON_VERSION', 'value': version},
         {'name': 'S3_BUCKET', 'value': os.environ['S3_BUCKET']}
     ]
     return overrides
@@ -93,7 +93,7 @@ def _submit_job(version, platform):
     """Submit a Python build job to AWS Batch."""
     job_name = '-'.join(['python', version, platform])
     job_name = job_name.replace('.', '_')
-    job_definition_arn = 'JOB_DEFINITION_ARN_{}'.format(platform.replace('-','_'))
+    job_definition_arn = 'JOB_DEFINITION_ARN_{}'.format(platform.replace('-', '_'))
     args = {
         'jobName': job_name,
         'jobQueue': os.environ['JOB_QUEUE_ARN'],

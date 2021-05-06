@@ -42,4 +42,4 @@ bash:
 		-w /python-builds \
 		${TARGET_IMAGE} /bin/bash
 
-.PHONY: deps docker-build docker-push docker-down docker-build-python docker-shell-python-env ecr-login fetch-serverless-custom-file serverless-deploy
+.PHONY: deps docker-build docker-push docker-down docker-build-python docker-shell-python-env ecr-login serverless-deploy

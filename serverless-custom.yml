@@ -1,0 +1,23 @@
+defaultStage: staging
+deploymentBucket: rstudio-serverless
+subnets: [subnet-dc046aaa]
+securityGroupIds: [sg-cd711db5]
+ec2KeyPair: infra
+pythonRequirements:
+  dockerizePip: true
+
+staging:
+  s3Bucket: rstudio-python-builds-staging
+  eventRuleState: DISABLED
+  stackTags:
+    "rs:owner": build@rstudio.com
+    "rs:project": infrastructure
+    "rs:environment": qa
+
+production:
+  s3Bucket: rstudio-python-builds
+  eventRuleState: ENABLED
+  stackTags:
+    "rs:owner": build@rstudio.com
+    "rs:project": infrastructure
+    "rs:environment": production

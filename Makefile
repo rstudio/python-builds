@@ -1,5 +1,5 @@
 PLATFORMS := ubuntu-2004
-SLS_BINARY ?= ./node_modules/serverless/bin/serverless
+SLS_BINARY ?= ./node_modules/serverless/bin/serverless.js
 
 deps:
 	npm install
@@ -27,16 +27,10 @@ docker-shell-python-env:
 ecr-login:
 	(aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com)
 
-push-serverless-custom-file:
-	aws s3 cp serverless-custom.yml s3://rstudio-devops/python-builds/serverless-custom.yml
-
-fetch-serverless-custom-file:
-	aws s3 cp s3://rstudio-devops/python-builds/serverless-custom.yml .
-
-rebuild-all: deps fetch-serverless-custom-file
+rebuild-all: deps
 	$(SLS_BINARY) invoke stepf -n pythonBuilds -d '{"force": true}'
 
-serverless-deploy.%: deps fetch-serverless-custom-file
+serverless-deploy.%: deps
 	$(SLS_BINARY) deploy --stage $*
 
 # Helper for launching a bash session on a docker image of your choice. Defaults
@@ -48,4 +42,4 @@ bash:
 		-w /python-builds \
 		${TARGET_IMAGE} /bin/bash
 
-.PHONY: deps docker-build docker-push docker-down docker-build-python docker-shell-python-env ecr-login fetch-serverless-custom-file serverless-deploy
+.PHONY: deps docker-build docker-push docker-down docker-build-python docker-shell-python-env ecr-login serverless-deploy

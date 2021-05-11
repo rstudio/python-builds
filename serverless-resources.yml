@@ -4,6 +4,20 @@ S3Bucket:
   Properties:
     BucketName: ${self:custom.${self:provider.stage}.s3Bucket}
 
+S3BucketPolicy:
+  Type: AWS::S3:BucketPolicy
+  Properties:
+    Bucket: !GetAtt S3Bucket.arn
+    PolicyDocument:
+      Statement:
+        - Sid: ' Grant a CloudFront Origin Identity access to support private content'
+          Action:
+            - 's3:GetObject'
+          Effect: Allow
+          Resource: 'arn:aws:s3:::rstudio-python-builds/*'
+          Principal:
+            AWS: 'arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity E22AXWZT9RAHBI'
+
 pythonBuildsBatchIamRole:
   Type: AWS::IAM::Role
   Properties:

@@ -14,7 +14,11 @@ S3BucketPolicy:
           Action:
             - 's3:GetObject'
           Effect: Allow
-          Resource: 'arn:aws:s3:::rstudio-python-builds/*'
+          Resource: !Join
+            - ''
+            - - 'arn:aws:s3:::'
+              - !Ref S3Bucket
+              - '/*'
           Principal:
             AWS: 'arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity E22AXWZT9RAHBI'
 

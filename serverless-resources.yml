@@ -10,7 +10,7 @@ S3BucketPolicy:
     Bucket: !GetAtt S3Bucket.arn
     PolicyDocument:
       Statement:
-        - Sid: ' Grant a CloudFront Origin Identity access to support private content'
+        - Sid: 'Grant a CloudFront Origin Identity access to support private content'
           Action:
             - 's3:GetObject'
           Effect: Allow

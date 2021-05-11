@@ -5,9 +5,9 @@ S3Bucket:
     BucketName: ${self:custom.${self:provider.stage}.s3Bucket}
 
 S3BucketPolicy:
-  Type: AWS::S3:BucketPolicy
+  Type: AWS::S3::BucketPolicy
   Properties:
-    Bucket: !GetAtt S3Bucket.arn
+    Bucket: !Ref S3Bucket
     PolicyDocument:
       Statement:
         - Sid: 'Grant a CloudFront Origin Identity access to support private content'

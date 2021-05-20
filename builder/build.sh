@@ -63,8 +63,7 @@ compile_python() {
   make install
   wget -q https://bootstrap.pypa.io/get-pip.py
   /opt/python/${VERSION}/bin/python${PYTHON_MAJOR} get-pip.py
-  /opt/python/${VERSION}/bin/pip install virtualenv
-  /opt/python/${VERSION{/bin/pip install ipykernel
+  /opt/python/${VERSION}/bin/pip install virtualenv ipykernel scipy numpy pandas
 }
 
 set_up_environment() {

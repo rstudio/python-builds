@@ -64,6 +64,7 @@ compile_python() {
   wget -q https://bootstrap.pypa.io/get-pip.py
   /opt/python/${VERSION}/bin/python${PYTHON_MAJOR} get-pip.py
   /opt/python/${VERSION}/bin/pip install virtualenv
+  /opt/python/${VERSION{/bin/pip install ipykernel
 }
 
 set_up_environment() {

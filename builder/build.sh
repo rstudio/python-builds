@@ -63,14 +63,14 @@ compile_python() {
   make install
   wget -q https://bootstrap.pypa.io/get-pip.py
   /opt/python/${VERSION}/bin/python${PYTHON_MAJOR} get-pip.py
-  /opt/python/${VERSION}/bin/pip install virtualenv ipykernel scipy numpy pandas scikit-learn
+  /opt/python/${VERSION}/bin/pip install ipykernel
 }
 
 set_up_environment() {
   mkdir -p /opt/python
 }
 
-###### RUN R COMPILE PROCEDURE ######
+###### RUN PYTHON COMPILE PROCEDURE ######
 set_up_environment
 fetch_python_source $PYTHON_VERSION
 compile_python $PYTHON_VERSION

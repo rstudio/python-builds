@@ -66,6 +66,13 @@ compile_python() {
   /opt/python/${VERSION}/bin/pip install ipykernel
 }
 
+package_python() {
+  if [[ -f /package.sh ]]; then
+    export PYTHON_VERSION=${1}
+    source /package.sh
+  fi
+}
+
 set_up_environment() {
   mkdir -p /opt/python
 }
@@ -74,5 +81,6 @@ set_up_environment() {
 set_up_environment
 fetch_python_source $PYTHON_VERSION
 compile_python $PYTHON_VERSION
+package_python $PYTHON_VERSION
 archive_python $PYTHON_VERSION
 upload_python $PYTHON_VERSION

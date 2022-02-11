@@ -1,33 +1,34 @@
 FROM ubuntu:focal
 
-ENV OS_IDENTIFIER ubuntu-2004
+ENV DEBIAN_FRONTEND=noninteractive
+ENV OS_IDENTIFIER=ubuntu-2004
 
-RUN set -x \
-  && sed -i "s|# deb-src|deb-src|g" /etc/apt/sources.list \
-  && export DEBIAN_FRONTEND=noninteractive \
-  && apt-get update \
-  && apt-get install -y \
-  build-essential \
-  ca-certificates \
-  gnupg \
+RUN apt-get update && apt-get upgrade -y
+
+RUN apt-get install -y \
+  wget \
+  ;
+
+RUN apt-get install -y \
+  gcc \
   libbz2-dev \
   libffi-dev \
-  libgdbm-compat-dev \
   libgdbm-dev \
   liblzma-dev \
   libncurses-dev \
   libreadline-dev \
-  libssl-dev \
   libsqlite3-dev \
-  libz-dev \
-  python-dev \
-  python3-pip \
+  libssl-dev \
+  make \
   tk-dev \
-  wget
+  zlib1g-dev \
+  ruby \ 
+  ruby-dev \
+  ;
 
-RUN pip3 install awscli
+RUN gem install fpm
 
-RUN chmod 0777 /opt
+COPY build.sh /build.sh
 
-COPY build.sh .
-ENTRYPOINT ./build.sh
+ENTRYPOINT ["/build.sh"]
+CMD []

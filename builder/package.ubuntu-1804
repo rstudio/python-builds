@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [[ ! -d /tmp/output/ubuntu-1804 ]]; then
+  mkdir -p /tmp/output/ubuntu-1804
+fi
+
+fpm \
+  -s dir \
+  -t deb \
+  -v ${BUILD_NUMBER} \
+  -n python${PYTHON_VERSION} \
+  --vendor "RStudio, PBC" \
+  --deb-priority "optional" \
+  --deb-field 'Bugs: https://github.com/rstudio/python-builds/issues' \
+  --url "https://www.python.org/" \
+  --description "interactive high-level object-oriented language" \
+  --maintainer "RStudio, PBC https://github.com/rstudio/python-builds" \
+  -p /tmp/output/${OS_IDENTIFIER}/ \
+  -d libev-dev \
+  /opt/python/${PYTHON_VERSION}
+
+shopt -s extglob
+export PKG_FILE=$(ls /tmp/output/${OS_IDENTIFIER}/[rR]-${R_VERSION}*.@(deb|rpm) | head -1)

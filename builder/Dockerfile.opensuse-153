@@ -17,6 +17,7 @@ RUN zypper --non-interactive --gpg-auto-import-keys install \
     intltool \
     libbz2-devel \
     libexpat-devel \
+    libev-devel \
     libffi-devel \
     libnsl-devel \
     lzma-devel \

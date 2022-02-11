@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [[ ! -d /tmp/output/ubuntu-2004-jupyter ]]; then
+  mkdir -p /tmp/output/ubuntu-2004-jupyter
+fi
+
 install_ipykernel() {
     local VERSION=${1}
     local PYTHON_MAJOR=$(cut -d'.' -f1 <<<$1)

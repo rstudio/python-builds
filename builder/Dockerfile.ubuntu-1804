@@ -14,6 +14,7 @@ RUN apt-get install -y \
   libbz2-dev \
   libffi-dev \
   libgdbm-dev \
+  libev-dev \
   liblzma-dev \
   libncurses-dev \
   libreadline-dev \

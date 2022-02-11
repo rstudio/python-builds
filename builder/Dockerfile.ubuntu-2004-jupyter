@@ -29,5 +29,6 @@ RUN pip3 install awscli
 
 RUN chmod 0777 /opt
 
+COPY package.ubuntu-2004-jupyter /package.sh
 COPY build.sh .
 ENTRYPOINT ./build.sh

@@ -39,8 +39,6 @@ RUN yum -y install \
 # Pin fpm for compatibility with Ruby < 2.3
 RUN gem install ffi:1.12.2 fpm:1.11.0
 
-COPY build.sh /build.sh
-
-ENTRYPOINT ["/build.sh"]
-CMD []
-
+COPY package.centos7 /package.sh
+COPY build.sh .
+ENTRYPOINT ./build.sh

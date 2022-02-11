@@ -28,7 +28,6 @@ RUN apt-get install -y \
 
 RUN gem install fpm
 
-COPY build.sh /build.sh
-
-ENTRYPOINT ["/build.sh"]
-CMD []
+COPY package.ubuntu-2004 /package.sh
+COPY build.sh .
+ENTRYPOINT ./build.sh

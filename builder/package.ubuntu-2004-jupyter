@@ -1,0 +1,10 @@
+#!/bin/bash
+
+install_ipykernel() {
+    local VERSION=${1}
+    local PYTHON_MAJOR=$(cut -d'.' -f1 <<<$1)
+    
+    wget -q https://bootstrap.pypa.io/get-pip.py
+    /opt/python/${VERSION}/bin/python${PYTHON_MAJOR} get-pip.py
+    /opt/python/${VERSION}/bin/pip install ipykernel
+}

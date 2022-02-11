@@ -38,8 +38,7 @@ RUN yum -y install \
 
 RUN gem install fpm
 
-COPY build.sh /build.sh
-
-ENTRYPOINT ["/build.sh"]
-CMD []
+COPY package.centos8 /package.sh
+COPY build.sh .
+ENTRYPOINT ./build.sh
 

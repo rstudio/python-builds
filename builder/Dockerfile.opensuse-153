@@ -38,6 +38,6 @@ RUN zypper --non-interactive --gpg-auto-import-keys install \
 RUN gem install fpm:1.13.1 && \
     ln -s /usr/lib64/ruby/gems/2.5.0/gems/fpm-1.13.1/bin/fpm /usr/local/bin/fpm
 
-COPY build.sh /build.sh
-ENTRYPOINT [ "/build.sh" ]
-CMD []
+COPY package.opensuse-153 /package.sh
+COPY build.sh .
+ENTRYPOINT ./build.sh

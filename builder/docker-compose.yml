@@ -35,6 +35,18 @@ services:
     image: python-builds:ubuntu-2004-jupyter
     volumes:
       - ./integration/tmp:/tmp/output
+
+  ubuntu-2204:
+    command: ./build.sh
+    environment:
+      - PYTHON_VERSION=${PYTHON_VERSION}
+      - LOCAL_STORE=/tmp/output
+    build:
+      context: .
+      dockerfile: Dockerfile.ubuntu-2204
+    image: python-builds:ubuntu-2204
+    volumes:
+      - ./integration/tmp:/tmp/output
   centos-7:
     command: ./build.sh
     environment:

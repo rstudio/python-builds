@@ -22,12 +22,17 @@ RUN apt-get install -y \
   libssl-dev \
   make \
   tk-dev \
+  wget \
   zlib1g-dev \
   ruby \ 
   ruby-dev \
-  ;
+  python3-pip
+
+RUN pip3 install awscli
 
 RUN gem install fpm
+
+RUN chmod 0777 /opt
 
 COPY package.ubuntu-2204 /package.sh
 COPY build.sh .

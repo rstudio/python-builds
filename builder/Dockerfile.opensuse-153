@@ -34,10 +34,17 @@ RUN zypper --non-interactive --gpg-auto-import-keys install \
     zlib-devel \
     ruby \
     ruby-devel \
+    python \
+    python-pip \
     && zypper clean
 
-RUN gem install fpm:1.13.1 && \
-    ln -s /usr/lib64/ruby/gems/2.5.0/gems/fpm-1.13.1/bin/fpm /usr/local/bin/fpm
+RUN pip install awscli
+
+# Pin fpm to avoid git dependency in 1.12.0
+RUN gem install fpm:1.11.0 && \
+    ln -s /usr/bin/fpm.ruby2.5 /usr/local/bin/fpm
+
+RUN chmod 0777 /opt
 
 COPY package.opensuse-153 /package.sh
 COPY build.sh .

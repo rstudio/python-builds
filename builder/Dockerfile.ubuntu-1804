@@ -6,10 +6,6 @@ ENV OS_IDENTIFIER=ubuntu-1804
 RUN apt-get update && apt-get upgrade -y
 
 RUN apt-get install -y \
-  wget \
-  ;
-
-RUN apt-get install -y \
   gcc \
   libbz2-dev \
   libffi-dev \
@@ -22,12 +18,19 @@ RUN apt-get install -y \
   libssl-dev \
   make \
   tk-dev \
+  wget \
   zlib1g-dev \
   ruby \
   ruby-dev \
-  ;
+  python-pip
 
-RUN gem install fpm
+RUN pip install awscli
+
+# Pin fpm to avoid git dependency in 1.12.0
+RUN gem install fpm:1.11.0
+
+RUN chmod 0777 /opt
+
 
 COPY package.ubuntu-1804 /package.sh
 COPY build.sh .

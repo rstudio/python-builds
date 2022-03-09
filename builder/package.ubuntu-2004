@@ -17,6 +17,7 @@ fpm \
   --maintainer "RStudio, PBC https://github.com/rstudio/python-builds" \
   -p /tmp/output/${OS_IDENTIFIER}/ \
   -d libev-dev \
+  -d python3-venv
   /opt/python/${PYTHON_VERSION}
 
 shopt -s extglob

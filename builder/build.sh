@@ -63,6 +63,13 @@ compile_python() {
   make install
 }
 
+package_python() {
+  if [[ -f /package.sh ]]; then
+    export PYTHON_VERSION=${1}
+    source /package.sh
+  fi
+}
+
 install_ipykernel() {
   local VERSION=${1}
   local PYTHON_MAJOR=$(cut -d'.' -f1 <<<$1)
@@ -80,6 +87,7 @@ set_up_environment() {
 set_up_environment
 fetch_python_source $PYTHON_VERSION
 compile_python $PYTHON_VERSION
+package_python $PYTHON_VERSION
 install_ipykernel $PYTHON_VERSION
 archive_python $PYTHON_VERSION
 upload_python $PYTHON_VERSION

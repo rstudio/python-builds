@@ -61,6 +61,12 @@ compile_python() {
   make clean
   make
   make install
+}
+
+install_ipykernel() {
+  local VERSION=${1}
+  local PYTHON_MAJOR=$(cut -d'.' -f1 <<<$1)
+
   wget -q https://bootstrap.pypa.io/get-pip.py
   /opt/python/${VERSION}/bin/python${PYTHON_MAJOR} get-pip.py
   /opt/python/${VERSION}/bin/pip install ipykernel
@@ -74,5 +80,6 @@ set_up_environment() {
 set_up_environment
 fetch_python_source $PYTHON_VERSION
 compile_python $PYTHON_VERSION
+install_ipykernel $PYTHON_VERSION
 archive_python $PYTHON_VERSION
 upload_python $PYTHON_VERSION

@@ -35,13 +35,9 @@ upload_python() {
   fi
 }
 
-# archive_python() - $1 as python version, $2 is jupyter flag
+# archive_python() - $1 as python version, $2 as target output
 archive_python() {
-  if [[ -n "$2" ]]; then
-    tar czf /tmp/${JUPYTER_TARBALL_NAME} --directory=/opt/python ${1} --owner=0 --group=0
-  else
-    tar czf /tmp/${TARBALL_NAME} --directory=/opt/python ${1} --owner=0 --group=0
-  fi
+  tar czf /tmp/${2} --directory=/opt/python ${1} --owner=0 --group=0
 }
 
 # fetch_python_source() - $1 as python version
@@ -70,13 +66,6 @@ compile_python() {
   make install
 }
 
-package_python() {
-  if [[ -f /package.sh ]]; then
-    export PYTHON_VERSION=${1}
-    source /package.sh
-  fi
-}
-
 install_ipykernel() {
   local VERSION=${1}
   local PYTHON_MAJOR=$(cut -d'.' -f1 <<<$1)
@@ -94,8 +83,7 @@ set_up_environment() {
 set_up_environment
 fetch_python_source $PYTHON_VERSION
 compile_python $PYTHON_VERSION
-archive_python $PYTHON_VERSION
-package_python $PYTHON_VERSION
+archive_python "${PYTHON_VERSION}"
 install_ipykernel $PYTHON_VERSION
-archive_python $PYTHON_VERSION WITH_JUPYTER
+archive_python "${PYTHON_VERSION}" "${JUPYTER_TARBALL_NAME}"
 upload_python $PYTHON_VERSION

@@ -1,43 +1,33 @@
 FROM ubuntu:focal
 
-ENV DEBIAN_FRONTEND=noninteractive
-ENV OS_IDENTIFIER=ubuntu-2004
+ENV OS_IDENTIFIER ubuntu-2004
 
-RUN sed -i "s|# deb-src|deb-src|g" /etc/apt/sources.list && \
-  apt-get update && apt-get upgrade -y
-
-RUN apt-get install -y \
-  gcc \
+RUN set -x \
+  && sed -i "s|# deb-src|deb-src|g" /etc/apt/sources.list \
+  && export DEBIAN_FRONTEND=noninteractive \
+  && apt-get update \
+  && apt-get install -y \
   build-essential \
   ca-certificates \
   gnupg \
   libbz2-dev \
-  libev-dev \
   libffi-dev \
   libgdbm-compat-dev \
   libgdbm-dev \
   liblzma-dev \
   libncurses-dev \
   libreadline-dev \
+  libssl-dev \
   libsqlite3-dev \
   libz-dev \
-  libssl-dev \
-  make \
-  tk-dev \
-  wget \
-  zlib1g-dev \
-  ruby \ 
-  ruby-dev \
+  python-dev \
   python3-pip \
-  python3-venv
+  tk-dev \
+  wget
 
 RUN pip3 install awscli
 
-# Pin fpm to avoid git dependency in 1.12.0
-RUN gem install fpm:1.11.0
-
 RUN chmod 0777 /opt
 
-COPY package.ubuntu-2004 /package.sh
 COPY build.sh .
 ENTRYPOINT ./build.sh

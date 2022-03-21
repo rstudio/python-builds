@@ -35,7 +35,7 @@ upload_python() {
   fi
 }
 
-# archive_python() - $1 as python version, $2 as target output
+# archive_python() - $1 as python version, $2 as target filename
 archive_python() {
   tar czf /tmp/${2} --directory=/opt/python ${1} --owner=0 --group=0
 }

@@ -4,6 +4,7 @@ set -e
 export S3_BUCKET_PREFIX=${S3_BUCKET_PREFIX-""}
 export OS_IDENTIFIER=${OS_IDENTIFIER-"unknown"}
 export TARBALL_NAME="python-${PYTHON_VERSION}-${OS_IDENTIFIER}.tar.gz"
+export JUPYTER_TARBALL_NAME="python-${PYTHON_VERSION}-jupyter-${OS_IDENTIFIER}.tar.gz"
 
 # Some Dockerfiles may copy a `/env.sh` to set up environment variables
 # that require command substitution. If this file exists, source it.
@@ -16,25 +17,27 @@ fi
 upload_python() {
   baseName="python/${OS_IDENTIFIER}"
   if [ -n "$S3_BUCKET" ] && [ "$S3_BUCKET" != "" ]; then
-    echo "Storing artifact on s3: ${S3_BUCKET}, tarball: ${TARBALL_NAME}"
+    echo "Storing artifacts on s3: ${S3_BUCKET}, tarball: ${TARBALL_NAME}, jupyter: ${JUPYTER_TARBALL_NAME}"
     aws s3 cp /tmp/${TARBALL_NAME} s3://${S3_BUCKET}/${S3_BUCKET_PREFIX}${baseName}/${TARBALL_NAME}
+    aws s3 cp /tmp/${JUPYTER_TARBALL_NAME} s3://${S3_BUCKET}/${S3_BUCKET_PREFIX}${baseName}/${JUPYTER_TARBALL_NAME}
     # check if PKG_FILE has been set by a packager script and act accordingly
     if [ -n "$PKG_FILE" ] && [ "$PKG_FILE" != "" ]; then
       if [ -f "$PKG_FILE" ]; then
-	aws s3 cp ${PKG_FILE} s3://${S3_BUCKET}/${S3_BUCKET_PREFIX}${baseName}/pkgs/$(basename ${PKG_FILE})
+	  aws s3 cp ${PKG_FILE} s3://${S3_BUCKET}/${S3_BUCKET_PREFIX}${baseName}/pkgs/$(basename ${PKG_FILE})
       fi
     fi
   fi
   if [ -n "$LOCAL_STORE" ] && [ "$LOCAL_STORE" != '' ]; then
-    echo "Storing artifact locally: ${LOCAL_STORE}, tarball: ${TARBALL_NAME}"
+    echo "Storing artifacts locally: ${LOCAL_STORE}, tarball: ${TARBALL_NAME}, jupyter: ${JUPYTER_TARBALL_NAME}"
     mkdir -p ${LOCAL_STORE}/${baseName}
     cp /tmp/${TARBALL_NAME} ${LOCAL_STORE}/${baseName}/${TARBALL_NAME}
+    cp /tmp/${JUPYTER_TARBALL_NAME} ${LOCAL_STORE}/${baseName}/${JUPYTER_TARBALL_NAME}
   fi
 }
 
-# archive_python() - $1 as python version
+# archive_python() - $1 as python version, $2 as target filename
 archive_python() {
-  tar czf /tmp/${TARBALL_NAME} --directory=/opt/python ${1} --owner=0 --group=0
+  tar czf /tmp/${2} --directory=/opt/python ${1} --owner=0 --group=0
 }
 
 # fetch_python_source() - $1 as python version
@@ -70,6 +73,15 @@ package_python() {
   fi
 }
 
+install_ipykernel() {
+  local VERSION=${1}
+  local PYTHON_MAJOR=$(cut -d'.' -f1 <<<$1)
+
+  wget -q https://bootstrap.pypa.io/get-pip.py
+  /opt/python/${VERSION}/bin/python${PYTHON_MAJOR} get-pip.py
+  /opt/python/${VERSION}/bin/pip install ipykernel
+}
+
 set_up_environment() {
   mkdir -p /opt/python
 }
@@ -79,5 +91,7 @@ set_up_environment
 fetch_python_source $PYTHON_VERSION
 compile_python $PYTHON_VERSION
 package_python $PYTHON_VERSION
-archive_python $PYTHON_VERSION
+archive_python "${PYTHON_VERSION}" "${TARBALL NAME}"
+install_ipykernel $PYTHON_VERSION
+archive_python "${PYTHON_VERSION}" "${JUPYTER_TARBALL_NAME}"
 upload_python $PYTHON_VERSION

@@ -83,7 +83,7 @@ set_up_environment() {
 set_up_environment
 fetch_python_source $PYTHON_VERSION
 compile_python $PYTHON_VERSION
-archive_python "${PYTHON_VERSION}" "${TARBALL NAME}"
+archive_python "${PYTHON_VERSION}" "${TARBALL_NAME}"
 install_ipykernel $PYTHON_VERSION
 archive_python "${PYTHON_VERSION}" "${JUPYTER_TARBALL_NAME}"
 upload_python $PYTHON_VERSION

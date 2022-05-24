@@ -30,6 +30,7 @@ RUN zypper --non-interactive --gpg-auto-import-keys install \
     rpm-build \
     sqlite-devel \
     tar \
+    wget \
     xz \
     zlib-devel \
     ruby \

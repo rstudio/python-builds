@@ -29,6 +29,7 @@ RUN yum -y install \
   tix-devel \
   tk-devel \
   valgrind-devel \
+  wget \
   zlib-devel \
   rpm-build \
   readline-devel \

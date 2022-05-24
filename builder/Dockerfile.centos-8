@@ -2,42 +2,44 @@ FROM rockylinux:8
 
 ENV OS_IDENTIFIER=centos-8
 
-RUN sed -i 's/^enabled=0/enabled=1/g' /etc/yum.repos.d/CentOS-Linux-PowerTools.repo && yum -y update
-
-RUN yum -y install \
-  autoconf \
-  bluez-libs-devel \
-  bzip2 \
-  bzip2-devel \
-  expat-devel \
-  gcc-c++ \
-  gdbm-devel \
-  git \
-  glibc-devel \
-  gmp-devel \
-  libev-devel \
-  libX11-devel \
-  libdb-devel \
-  libffi-devel \
-  mesa-libGL-devel \
-  ncurses-devel \
-  openssl-devel \
-  readline-devel \
-  sqlite-devel \
-  systemtap-sdt-devel \
-  tcl-devel \
-  tix-devel \
-  tk-devel \
-  valgrind-devel \
-  zlib-devel \
-  rpm-build \
-  readline-devel \
-  make \
-  ruby \ 
-  ruby-devel \
-  python36 \
-  python3-pip \
-  && yum clean all
+RUN dnf -y upgrade \
+    && dnf -y install dnf-plugins-core \
+    && dnf config-manager --set-enabled powertools \
+    && dnf -y install \
+    autoconf \
+    bluez-libs-devel \
+    bzip2 \
+    bzip2-devel \
+    expat-devel \
+    gcc-c++ \
+    gdbm-devel \
+    git \
+    glibc-devel \
+    gmp-devel \
+    libev-devel \
+    libX11-devel \
+    libdb-devel \
+    libffi-devel \
+    mesa-libGL-devel \
+    ncurses-devel \
+    openssl-devel \
+    readline-devel \
+    sqlite-devel \
+    systemtap-sdt-devel \
+    tcl-devel \
+    tix-devel \
+    tk-devel \
+    valgrind-devel \
+    wget \
+    zlib-devel \
+    rpm-build \
+    readline-devel \
+    make \
+    ruby \ 
+    ruby-devel \
+    python36 \
+    python3-pip \
+    && dnf clean all
 
 # Install AWS CLI.
 RUN pip3 install awscli --upgrade --user \

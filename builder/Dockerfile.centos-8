@@ -48,7 +48,7 @@ RUN gem install fpm:1.11.0
 
 RUN chmod 0777 /opt
 
-COPY package.centos8 /package.sh
+COPY package.centos-8 /package.sh
 COPY build.sh .
 ENTRYPOINT ./build.sh
 

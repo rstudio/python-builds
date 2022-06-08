@@ -22,5 +22,15 @@ pipeline {
         sh 'make docker-push'
       }
     }
+    stage('deploy') {
+      agent none
+      when {
+        branch 'main'
+      }
+      steps {
+        build(job: 'python-builds/deploy-python-builds', wait: true,
+              parameters: [string(name: 'ENVIRONMENT', value: 'staging')])
+      }
+    }
   }
 }

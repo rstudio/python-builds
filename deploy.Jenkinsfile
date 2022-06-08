@@ -14,7 +14,7 @@ pipeline {
     ansiColor('xterm')
   }
   parameters {
-    choice(name: 'ENVIRONMENT', choices: ['production'],
+    choice(name: 'ENVIRONMENT', choices: ['staging', 'production'],
            description: 'The target environment to deploy to.')
   }
   stages {

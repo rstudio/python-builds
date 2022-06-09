@@ -1,0 +1,52 @@
+FROM opensuse/leap:15.3
+
+ENV OS_IDENTIFIER=opensuse-153
+
+RUN zypper --non-interactive update
+
+RUN zypper --non-interactive --gpg-auto-import-keys install \
+    automake \
+    fdupes \
+    gcc \
+    gcc-c++ \
+    gcc-fortran \
+    gdbm-devel \
+    gettext-tools \
+    gmp-devel \
+    gzip \
+    intltool \
+    libbz2-devel \
+    libexpat-devel \
+    libev-devel \
+    libffi-devel \
+    libnsl-devel \
+    lzma-devel \
+    make \
+    ncurses-devel \
+    netcfg \
+    openssl-devel \
+    pkgconfig \
+    readline-devel \
+    rpm-build \
+    sqlite-devel \
+    tar \
+    wget \
+    xz \
+    zlib-devel \
+    ruby \
+    ruby-devel \
+    python \
+    python-pip \
+    && zypper clean
+
+RUN pip install awscli
+
+# Pin fpm to avoid git dependency in 1.12.0
+RUN gem install fpm:1.11.0 && \
+    ln -s /usr/bin/fpm.ruby2.5 /usr/local/bin/fpm
+
+RUN chmod 0777 /opt
+
+COPY package.opensuse-153 /package.sh
+COPY build.sh .
+ENTRYPOINT ./build.sh

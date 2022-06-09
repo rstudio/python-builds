@@ -1,9 +1,13 @@
-FROM ubuntu:focal
+FROM ubuntu:jammy
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV OS_IDENTIFIER=ubuntu-2004
+ENV OS_IDENTIFIER=ubuntu-2204
 
 RUN apt-get update && apt-get upgrade -y
+
+RUN apt-get install -y \
+  wget \
+  ;
 
 RUN apt-get install -y \
   gcc \
@@ -27,11 +31,10 @@ RUN apt-get install -y \
 
 RUN pip3 install awscli
 
-# Pin fpm to avoid git dependency in 1.12.0
-RUN gem install fpm:1.11.0
+RUN gem install fpm
 
 RUN chmod 0777 /opt
 
-COPY package.ubuntu-2004 /package.sh
+COPY package.ubuntu-2204 /package.sh
 COPY build.sh .
 ENTRYPOINT ./build.sh

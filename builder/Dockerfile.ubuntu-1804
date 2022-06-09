@@ -1,16 +1,16 @@
-FROM ubuntu:focal
+FROM ubuntu:bionic
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV OS_IDENTIFIER=ubuntu-2004
+ENV OS_IDENTIFIER=ubuntu-1804
 
 RUN apt-get update && apt-get upgrade -y
 
 RUN apt-get install -y \
   gcc \
   libbz2-dev \
-  libev-dev \
   libffi-dev \
   libgdbm-dev \
+  libev-dev \
   liblzma-dev \
   libncurses-dev \
   libreadline-dev \
@@ -20,18 +20,18 @@ RUN apt-get install -y \
   tk-dev \
   wget \
   zlib1g-dev \
-  ruby \ 
+  ruby \
   ruby-dev \
-  python3-pip \
-  python3-venv
+  python-pip
 
-RUN pip3 install awscli
+RUN pip install awscli
 
 # Pin fpm to avoid git dependency in 1.12.0
 RUN gem install fpm:1.11.0
 
 RUN chmod 0777 /opt
 
-COPY package.ubuntu-2004 /package.sh
+
+COPY package.ubuntu-1804 /package.sh
 COPY build.sh .
 ENTRYPOINT ./build.sh

@@ -22,7 +22,7 @@ Python binaries are built for the following Linux operating systems:
 - openSUSE 15.3
 ## Quick Installation
 
-To use our quick install script to install R, simply run the following
+To use our quick install script to install Python, simply run the following
 command. To use the quick installer, you must have root or sudo privileges,
 and `curl` must be installed.
 
@@ -34,8 +34,8 @@ bash -c "$(curl -L https://rstd.io/python-install)"
 
 ### Specify Python version
 
-Define the version of R that you want to install. Available versions
-of R can be found here: https://cdn.rstudio.com/python/versions.json
+Define the version of Python that you want to install. Available versions
+of Python can be found here: https://cdn.rstudio.com/python/versions.json
 ```bash
 PYTHON_VERSION=3.5.3
 ```

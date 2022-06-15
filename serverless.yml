@@ -41,12 +41,6 @@ provider:
       Ref: pythonBuildsBatchJobDefinitionUbuntu2004
     JOB_DEFINITION_ARN_ubuntu_2204:
       Ref: pythonBuildsBatchJobDefinitionUbuntu2204
-    JOB_DEFINITION_ARN_debian_9:
-      Ref: pythonBuildsBatchJobDefinitionDebian9
-    JOB_DEFINITION_ARN_debian_10:
-      Ref: pythonBuildsBatchJobDefinitionDebian10
-    JOB_DEFINITION_ARN_debian_11:
-      Ref: pythonBuildsBatchJobDefinitionDebian11
     JOB_DEFINITION_ARN_centos_7:
       Ref: pythonBuildsBatchJobDefinitionCentos7
     JOB_DEFINITION_ARN_centos_8:

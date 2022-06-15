@@ -49,7 +49,7 @@ provider:
       Ref: pythonBuildsBatchJobDefinitionOpensuse42
     JOB_DEFINITION_ARN_opensuse_153:
       Ref: pythonBuildsBatchJobDefinitionOpensuse153
-    SUPPORTED_PLATFORMS: ubuntu-1804,ubuntu-2004,ubuntu-2204,centos-7,centos-8,opensuse-42,opensuse-153
+    SUPPORTED_PLATFORMS: ubuntu-1804,ubuntu-2004,ubuntu-2204,centos-7,centos-8,opensuse-153
 
 functions:
   queueBuilds:

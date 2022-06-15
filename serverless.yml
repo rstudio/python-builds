@@ -35,9 +35,27 @@ provider:
     S3_BUCKET: ${self:custom.${self:provider.stage}.s3Bucket}
     JOB_QUEUE_ARN:
       Ref: pythonBuildsBatchJobQueue
+    JOB_DEFINITION_ARN_ubuntu_1804:
+      Ref: pythonBuildsBatchJobDefinitionUbuntu1804
     JOB_DEFINITION_ARN_ubuntu_2004:
       Ref: pythonBuildsBatchJobDefinitionUbuntu2004
-    SUPPORTED_PLATFORMS: ubuntu-2004
+    JOB_DEFINITION_ARN_ubuntu_2204:
+      Ref: pythonBuildsBatchJobDefinitionUbuntu2204
+    JOB_DEFINITION_ARN_debian_9:
+      Ref: pythonBuildsBatchJobDefinitionDebian9
+    JOB_DEFINITION_ARN_debian_10:
+      Ref: pythonBuildsBatchJobDefinitionDebian10
+    JOB_DEFINITION_ARN_debian_11:
+      Ref: pythonBuildsBatchJobDefinitionDebian11
+    JOB_DEFINITION_ARN_centos_7:
+      Ref: pythonBuildsBatchJobDefinitionCentos7
+    JOB_DEFINITION_ARN_centos_8:
+      Ref: pythonBuildsBatchJobDefinitionCentos8
+    JOB_DEFINITION_ARN_opensuse_42:
+      Ref: pythonBuildsBatchJobDefinitionOpensuse42
+    JOB_DEFINITION_ARN_opensuse_153:
+      Ref: pythonBuildsBatchJobDefinitionOpensuse153
+    SUPPORTED_PLATFORMS: ubuntu-1804,ubuntu-2004,ubuntu-2204,centos-7,centos-8,opensuse-42,opensuse-153
 
 functions:
   queueBuilds:

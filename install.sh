@@ -139,7 +139,7 @@ detect_installer_type () {
   esac
 }
 
-# Lists available R versions
+# Lists available Python versions
 show_versions () {
   for v in ${PYTHON_VERSIONS}
   do
@@ -496,11 +496,11 @@ do_install () {
 
 do_show_usage() {
   echo "python-builds quick install version ${THIS_VERSION}"
-  echo "Usage: `basename $0` [-i|-r|-v|-h|install|rversions|version|help]"
+  echo "Usage: `basename $0` [-i|-r|-v|-h|install|pyversions|version|help]"
   echo "Where:"
-  echo "'-i' or 'install' [version] [-y|yes] (default) list R versions available for quick install and prompt for one"
+  echo "'-i' or 'install' [version] [-y|yes] (default) list Python versions available for quick install and prompt for one"
   echo "If a version is provided, the installation proceeds without prompting, confirmations can be optionally skipped"
-  echo "'-r' or 'rversions' list the R versions available for quick install, one per line"
+  echo "'-p' or 'pyversions' list the Python versions available for quick install, one per line"
   echo "'-v' or 'version' shows the version of this command"
   echo "'-h' or 'help' show this info"
 }

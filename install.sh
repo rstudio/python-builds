@@ -391,18 +391,18 @@ do_download () {
         echo "Downloading ${url}..."
 
         if [[ "${RUN_UNATTENDED}" -ne "0" ]]; then
-          wget -q --header "User-Agent: ${RS_USER_AGENT:-r-builds}" "${url}"
+          wget -q --header "User-Agent: ${RS_USER_AGENT:-python-builds}" "${url}"
         else
-          wget --progress=bar --header "User-Agent: ${RS_USER_AGENT:-r-builds}" "${url}"
+          wget --progress=bar --header "User-Agent: ${RS_USER_AGENT:-python-builds}" "${url}"
         fi
         rc=$?
     # Or, If curl is around, use that.
     elif [[ -z "${curl_rc}" ]]; then
         echo "Downloading ${url}..."
         if [[ "${RUN_UNATTENDED}" -ne "0" ]]; then
-          curl -fsSL -H "User-Agent: ${RS_USER_AGENT:-r-builds}" --output "${file_name}" "${url}"
+          curl -fsSL -H "User-Agent: ${RS_USER_AGENT:-python-builds}" --output "${file_name}" "${url}"
         else
-          curl -fL -H "User-Agent: ${RS_USER_AGENT:-r-builds}" --output "${file_name}" --progress-bar "${url}"
+          curl -fL -H "User-Agent: ${RS_USER_AGENT:-python-builds}" --output "${file_name}" --progress-bar "${url}"
         fi
         rc=$?
     # Otherwise, we can't go on.
@@ -495,7 +495,7 @@ do_install () {
 }
 
 do_show_usage() {
-  echo "r-builds quick install version ${THIS_VERSION}"
+  echo "python-builds quick install version ${THIS_VERSION}"
   echo "Usage: `basename $0` [-i|-r|-v|-h|install|rversions|version|help]"
   echo "Where:"
   echo "'-i' or 'install' [version] [-y|yes] (default) list R versions available for quick install and prompt for one"

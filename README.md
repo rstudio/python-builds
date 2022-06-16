@@ -37,7 +37,7 @@ bash -c "$(curl -L https://rstd.io/python-install)"
 Define the version of Python that you want to install. Available versions
 of Python can be found here: https://cdn.rstudio.com/python/versions.json
 ```bash
-PYTHON_VERSION=3.5.3
+PYTHON_VERSION=3.8.6
 ```
 
 ### Download and install Python
@@ -107,12 +107,12 @@ sudo zypper --gpg-auto-import-keys addrepo https://download.opensuse.org/reposit
 Download the rpm package:
 ```bash
 # openSUSE 15.3 / SLES 15 SP3
-wget https://cdn.rstudio.com/r/opensuse-153/pkgs/R-${R_VERSION}-1-1.x86_64.rpm
+wget https://cdn.rstudio.com/python/opensuse-153/pkgs/python-${PYTHON_VERSION}-1-1.x86_64.rpm
 ```
 
 Then install the package:
 ```bash
-sudo zypper --no-gpg-checks install R-${R_VERSION}-1-1.x86_64.rpm
+sudo zypper --no-gpg-checks install R-${PYTHON_VERSION}-1-1.x86_64.rpm
 ```
 
 ### Verify Python installation
@@ -137,3 +137,123 @@ If you want to install multiple versions of Python on the same system, you can
 repeat these steps to install a different version of Python alongside existing versions.
 
 ---
+
+# Developer Documentation
+
+This repository orchestrates builds using a variety of tools. The
+instructions below outline the components in the stack and describe how to add a
+new platform or inspect an existing platform.
+
+## Adding a new platform:
+
+### Dockerfile
+
+Create a `builder/Dockerfile.platform-version` (where `platform-version` is `ubuntu-2204` or `centos-7`, etc.) This file must contain four major tasks:
+
+1. an `OS_IDENTIFIER` env with the `platform-version`.
+2. a step which ensures the Python source build dependencies are installed
+3. The `awscli`, 1.17.10+ if installed via `pip`, for uploading tarballs to S3
+4. `COPY` and `ENTRYPOINT` for the `build.sh` file in `builder/`.
+
+### docker-compose.yml
+
+A new service in the docker-compose file named according to the `platform-version` and containing the proper entries:
+
+```
+command: ./build.sh
+environment:
+  - PYTHON_VERSION=${PYTHON_VERSION} # for testing out Python builds locally
+  - LOCAL_STORE=/tmp/output # ensures that output tarballs are persisted locally
+build:
+  context: .
+  dockerfile: Dockerfile.debian-9
+image: python-builds:debian-9
+volumes:
+  - ./integration/tmp:/tmp/output  # path to output tarballs
+```
+
+### Job definition
+
+IN `serverless-resources.yml` you'll need to add a job definition that points to the ECR image.
+
+```
+pythonBuildsBatchJobDefinitionDebian9:
+  Type: AWS::Batch::JobDefinition
+  Properties:
+    Type: container
+    ContainerProperties:
+      Command:
+        - ./build.sh
+      Vcpus: 4
+      Memory: 4096
+      JobRoleArn:
+        "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
+      Image: #{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:debian-9
+```
+
+### Environment variables in the serverless.yml functions.
+
+The serverless functions which trigger Python builds need to be informed of new platforms.
+
+1. Add a `JOB_DEFINITION_ARN_PlatformVersion` env variable with a ref to the Job definition above.
+2. Append the `platform-version` to `SUPPORTED_PLATFORMS`.
+
+```
+environment:
+  # snip
+  JOB_DEFINITION_ARN_debian_9:
+    Ref: pythonBuildsBatchJobDefinitionDebian9
+  SUPPORTED_PLATFORMS: ubuntu-1804,debian-9,debian-10,centos-7,centos-8
+```
+
+### Makefile
+
+In order for the makefile to push these new platforms to ECR, add them to the PLATFORMS variable near the top of the Makefile
+
+### Submit a Pull Request
+
+Once you've followed the steps above, submit a pull request. On successful merge, builds for this platform will begin to be available from the CDN.
+
+## "Break Glass"
+
+Periodically, someone with access to these resources may need to re-trigger every R version/platform combination. This quite easy with the `serverless` tool installed.
+
+```bash
+# Rebuild all Python versions
+serverless invoke stepf -n pythonBuilds -d '{"force": true}'
+
+# Rebuild specific Python versions
+serverless invoke stepf -n pythonBuilds -d '{"force": true, "versions": ["3.6.8", "3.9.10"]}'
+```
+
+## Testing
+
+To test the Python builds locally, you can build the images:
+
+```bash
+# Build images for all platforms
+make docker-build
+
+# Or build the image for a single platform
+(cd builder && docker-compose build ubuntu-2004)
+```
+
+Then run the build script:
+
+```bash
+# Build Python for all platforms
+PYTHON_VERSION=3.8.6 make docker-build-python
+
+# Build Python for a single platform
+(cd builder && PYTHON_VERSION=3.8.6 docker-compose up ubuntu-2004)
+
+# Alternatively, run the build script from within a container
+docker run -it --rm --entrypoint "/bin/bash" python-builds:ubuntu-2004
+
+# Build Python 3.8.6
+PYTHON_VERSION=3.8.6 ./build.sh
+
+
+# Build a prerelease version of Python (e.g., alpha or beta)
+PYTHON_VERSION=rc PYTHON_TARBALL_URL=https://www.python.org/ftp/python/3.11.0/Python-3.11.0b3.tgz ./build.sh
+```

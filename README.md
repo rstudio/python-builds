@@ -216,7 +216,7 @@ Once you've followed the steps above, submit a pull request. On successful merge
 
 ## "Break Glass"
 
-Periodically, someone with access to these resources may need to re-trigger every R version/platform combination. This quite easy with the `serverless` tool installed.
+Periodically, someone with access to these resources may need to re-trigger every Python version/platform combination. This quite easy with the `serverless` tool installed.
 
 ```bash
 # Rebuild all Python versions

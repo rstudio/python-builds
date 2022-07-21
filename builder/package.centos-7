@@ -8,7 +8,7 @@ fpm \
   -s dir \
   -t rpm \
   -v ${BUILD_NUMBER} \
-  -n python${PYTHON_VERSION} \
+  -n python-${PYTHON_VERSION} \
   --vendor "RStudio, PBC" \
   --deb-priority "optional" \
   --deb-field 'Bugs: https://github.com/rstudio/python-builds/issues' \

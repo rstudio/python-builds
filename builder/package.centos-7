@@ -19,5 +19,4 @@ fpm \
   -n "python-${PYTHON_VERSION}" \
   "/opt/python/${PYTHON_VERSION}"
 
-shopt -s extglob
-export PKG_FILE=$(ls /tmp/output/${OS_IDENTIFIER}/[python]-${PYTHON_VERSION}*.@(deb|rpm) | head -1)
+export PKG_FILE=$(find "/tmp/output/${OS_IDENTIFIER}" -name 'python*.deb' -or -name 'python*.rpm' | head -1)

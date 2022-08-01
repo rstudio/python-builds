@@ -5,20 +5,19 @@ if [[ ! -d /tmp/output/ubuntu-2204 ]]; then
 fi
 
 fpm \
-  -s dir \
-  -t deb \
-  -v ${BUILD_NUMBER} \
-  -n python-${PYTHON_VERSION} \
   --vendor "RStudio, PBC" \
   --deb-priority "optional" \
   --deb-field 'Bugs: https://github.com/rstudio/python-builds/issues' \
   --url "https://www.python.org/" \
   --description "interactive high-level object-oriented language" \
   --maintainer "RStudio, PBC https://github.com/rstudio/python-builds" \
-  -p /tmp/output/${OS_IDENTIFIER}/ \
+  -p "/tmp/output/${OS_IDENTIFIER}/" \
   -d libev-dev \
-  -d python3-venv
-  /opt/python/${PYTHON_VERSION}
+  -d python3-venv \
+  -s dir \
+  -t deb \
+  -v 1 \
+  -n "python-${PYTHON_VERSION}" \
+  "/opt/python/${PYTHON_VERSION}"
 
-shopt -s extglob
-export PKG_FILE=$(ls /tmp/output/${OS_IDENTIFIER}/[python]-${PYTHON_VERSION}*.@(deb|rpm) | head -1)
+export PKG_FILE=$(find "/tmp/output/${OS_IDENTIFIER}" -name 'python*.deb' -or -name 'python*.rpm' | head -1)

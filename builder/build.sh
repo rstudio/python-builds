@@ -88,10 +88,10 @@ set_up_environment() {
 
 ###### RUN PYTHON COMPILE PROCEDURE ######
 set_up_environment
-fetch_python_source $PYTHON_VERSION
-compile_python $PYTHON_VERSION
+fetch_python_source "$PYTHON_VERSION"
+compile_python "$PYTHON_VERSION"
 archive_python "${PYTHON_VERSION}" "${TARBALL_NAME}"
-package_python $PYTHON_VERSION
-install_ipykernel $PYTHON_VERSION
+package_python "$PYTHON_VERSION"
+install_ipykernel "$PYTHON_VERSION"
 archive_python "${PYTHON_VERSION}" "${JUPYTER_TARBALL_NAME}"
-upload_python $PYTHON_VERSION
+upload_python "$PYTHON_VERSION"

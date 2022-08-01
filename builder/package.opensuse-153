@@ -5,19 +5,19 @@ if [[ ! -d /tmp/output/opensuse-153 ]]; then
 fi
 
 fpm \
-  -s dir \
-  -t rpm \
-  -v ${BUILD_NUMBER} \
-  -n python-${PYTHON_VERSION} \
   --vendor "RStudio, PBC" \
   --deb-priority "optional" \
   --deb-field 'Bugs: https://github.com/rstudio/python-builds/issues' \
   --url "https://www.python.org/" \
   --description "interactive high-level object-oriented language" \
   --maintainer "RStudio, PBC https://github.com/rstudio/python-builds" \
-  -p /tmp/output/${OS_IDENTIFIER}/ \
+  -p "/tmp/output/${OS_IDENTIFIER}/" \
   -d libev-devel \
-  /opt/python/${PYTHON_VERSION}
+  -s dir \
+  -t rpm \
+  -v 1 \
+  -n "python-${PYTHON_VERSION}" \
+  "/opt/python/${PYTHON_VERSION}"
 
-shopt -s extglob
-export PKG_FILE=$(ls /tmp/output/${OS_IDENTIFIER}/[python]-${PYTHON_VERSION}*.@(deb|rpm) | head -1)
+export PKG_FILE=$(find "/tmp/output/${OS_IDENTIFIER}" -name 'python*.deb' -or -name 'python*.rpm' | head -1)
+

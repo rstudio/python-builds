@@ -33,6 +33,10 @@ rebuild-all: deps
 serverless-deploy.%: deps
 	$(SLS_BINARY) deploy --stage $*
 
+# This will rebuild all the python binaries, every version, every operating system
+break-glass.%: deps
+	$(SLS_BINARY) invoke stepf -n pythonBuilds -d '{"force": true}' --stage $*
+
 # Helper for launching a bash session on a docker image of your choice. Defaults
 # to "ubuntu:focal".
 TARGET_IMAGE?=ubuntu:focal
@@ -42,4 +46,4 @@ bash:
 		-w /python-builds \
 		${TARGET_IMAGE} /bin/bash
 
-.PHONY: deps docker-build docker-push docker-down docker-build-python docker-shell-python-env ecr-login serverless-deploy
+.PHONY: deps docker-build docker-push docker-down docker-build-python docker-shell-python-env ecr-login serverless-deploy break-glass

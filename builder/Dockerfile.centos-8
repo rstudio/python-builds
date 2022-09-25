@@ -10,6 +10,7 @@ RUN dnf -y upgrade \
     bluez-libs-devel \
     bzip2 \
     bzip2-devel \
+    curl \
     expat-devel \
     gcc-c++ \
     gdbm-devel \
@@ -35,8 +36,6 @@ RUN dnf -y upgrade \
     rpm-build \
     readline-devel \
     make \
-    ruby \ 
-    ruby-devel \
     python36 \
     python3-pip \
     && dnf clean all
@@ -45,8 +44,9 @@ RUN dnf -y upgrade \
 RUN pip3 install awscli --upgrade --user \
     && ln -s /root/.local/bin/aws /usr/bin/aws
 
-# Pin fpm to avoid git dependency in 1.12.0
-RUN gem install fpm:1.11.0
+RUN curl -LO https://github.com/goreleaser/nfpm/releases/download/v2.18.1/nfpm_amd64.rpm && \
+    dnf install -y nfpm_amd64.rpm && \
+    rm nfpm_amd64.rpm
 
 RUN chmod 0777 /opt
 

@@ -1,23 +1,29 @@
 #!/bin/bash
 
-if [[ ! -d /tmp/output/opensuse-153 ]]; then
-  mkdir -p /tmp/output/opensuse-153
+if [[ ! -d /tmp/output/${OS_IDENTIFIER} ]]; then
+  mkdir -p "/tmp/output/${OS_IDENTIFIER}"
 fi
 
-fpm \
-  --vendor "RStudio, PBC" \
-  --deb-priority "optional" \
-  --deb-field 'Bugs: https://github.com/rstudio/python-builds/issues' \
-  --url "https://www.python.org/" \
-  --description "interactive high-level object-oriented language" \
-  --maintainer "RStudio, PBC https://github.com/rstudio/python-builds" \
-  -p "/tmp/output/${OS_IDENTIFIER}/" \
-  -d libev-devel \
-  -s dir \
-  -t rpm \
-  -v 1 \
-  -n "python-${PYTHON_VERSION}" \
-  "/opt/python/${PYTHON_VERSION}"
+cat <<EOF > /tmp/nfpm.yml
+name: python-${PYTHON_VERSION}
+version: 1
+version_schema: none
+release: 1
+maintainer: RStudio, PBC <https://github.com/rstudio/python-builds>
+vendor: RStudio, PBC
+description: "interactive high-level object-oriented language"
+homepage: https://www.python.org/
+license: 	GPL-3.0-only
+depends:
+- libev-devel
+contents:
+- src: /opt/python/${PYTHON_VERSION}
+  dst: /opt/python/${PYTHON_VERSION}
+EOF
+
+nfpm package \
+  -f /tmp/nfpm.yml \
+  -p rpm \
+  -t "/tmp/output/${OS_IDENTIFIER}"
 
 export PKG_FILE=$(find "/tmp/output/${OS_IDENTIFIER}" -name 'python*.deb' -or -name 'python*.rpm' | head -1)
-

@@ -36,6 +36,30 @@ services:
     image: python-builds:ubuntu-2204
     volumes:
       - ./integration/tmp:/tmp/output
+
+  debian-10:
+    command: ./build.sh
+    environment:
+      - PYTHON_VERSION=${PYTHON_VERSION}
+      - LOCAL_STORE=/tmp/output
+    build:
+      context: .
+      dockerfile: Dockerfile.debian-10
+    image: python-builds:debian-10
+    volumes:
+      - ./integration/tmp:/tmp/output
+
+  debian-11:
+    command: ./build.sh
+    environment:
+      - PYTHON_VERSION=${PYTHON_VERSION}
+      - LOCAL_STORE=/tmp/output
+    build:
+      context: .
+      dockerfile: Dockerfile.debian-11
+    image: python-builds:debian-11
+    volumes:
+      - ./integration/tmp:/tmp/output
   centos-7:
     command: ./build.sh
     environment:
@@ -60,6 +84,18 @@ services:
     volumes:
       - ./integration/tmp:/tmp/output
 
+  rhel-9:
+    command: ./build.sh
+    environment:
+      - PYTHON_VERSION=${PYTHON_VERSION}
+      - LOCAL_STORE=/tmp/output
+    build:
+      context: .
+      dockerfile: Dockerfile.rhel-9
+    image: python-builds:rhel-9
+    volumes:
+      - ./integration/tmp:/tmp/output
+
   opensuse-153:
     command: ./build.sh
     environment:
@@ -69,5 +105,17 @@ services:
       context: .
       dockerfile: Dockerfile.opensuse-153
     image: python-builds:opensuse-153
+    volumes:
+      - ./integration/tmp:/tmp/output
+
+  opensuse-154:
+    command: ./build.sh
+    environment:
+      - PYTHON_VERSION=${PYTHON_VERSION}
+      - LOCAL_STORE=/tmp/output
+    build:
+      context: .
+      dockerfile: Dockerfile.opensuse-154
+    image: python-builds:opensuse-154
     volumes:
       - ./integration/tmp:/tmp/output

@@ -198,6 +198,34 @@ pythonBuildsBatchJobDefinitionUbuntu2204:
       Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:ubuntu-2204"
     Timeout:
       AttemptDurationSeconds: 7200
+pythonBuildsBatchJobDefinitionDebian10:
+  Type: AWS::Batch::JobDefinition
+  Properties:
+    Type: container
+    ContainerProperties:
+      Command:
+        - ./build.sh
+      Vcpus: 4
+      Memory: 4096
+      JobRoleArn:
+        "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
+      Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:debian-10"
+    Timeout:
+      AttemptDurationSeconds: 7200
+pythonBuildsBatchJobDefinitionDebian11:
+  Type: AWS::Batch::JobDefinition
+  Properties:
+    Type: container
+    ContainerProperties:
+      Command:
+        - ./build.sh
+      Vcpus: 4
+      Memory: 4096
+      JobRoleArn:
+        "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
+      Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:debian-11"
+    Timeout:
+      AttemptDurationSeconds: 7200
 pythonBuildsBatchJobDefinitionCentos7:
   Type: AWS::Batch::JobDefinition
   Properties:
@@ -226,7 +254,7 @@ pythonBuildsBatchJobDefinitionCentos8:
       Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:centos-8"
     Timeout:
       AttemptDurationSeconds: 7200
-pythonBuildsBatchJobDefinitionOpensuse42:
+pythonBuildsBatchJobDefinitionRhel9:
   Type: AWS::Batch::JobDefinition
   Properties:
     Type: container
@@ -237,7 +265,7 @@ pythonBuildsBatchJobDefinitionOpensuse42:
       Memory: 4096
       JobRoleArn:
         "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
-      Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:opensuse-42"
+      Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:rhel-9"
     Timeout:
       AttemptDurationSeconds: 7200
 pythonBuildsBatchJobDefinitionOpensuse153:
@@ -252,6 +280,20 @@ pythonBuildsBatchJobDefinitionOpensuse153:
       JobRoleArn:
         "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
       Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:opensuse-153"
+    Timeout:
+      AttemptDurationSeconds: 7200
+pythonBuildsBatchJobDefinitionOpensuse154:
+  Type: AWS::Batch::JobDefinition
+  Properties:
+    Type: container
+    ContainerProperties:
+      Command:
+        - ./build.sh
+      Vcpus: 4
+      Memory: 4096
+      JobRoleArn:
+        "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
+      Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:opensuse-154"
     Timeout:
       AttemptDurationSeconds: 7200
 

@@ -1,7 +1,6 @@
-FROM ubuntu:jammy
+FROM debian:bullseye
 
-ENV DEBIAN_FRONTEND=noninteractive
-ENV OS_IDENTIFIER=ubuntu-2204
+ENV OS_IDENTIFIER debian-11
 
 RUN apt-get update && apt-get upgrade -y
 
@@ -26,12 +25,12 @@ RUN apt-get install -y \
 
 RUN pip3 install awscli
 
+RUN chmod 0777 /opt
+
 RUN curl -LO https://github.com/goreleaser/nfpm/releases/download/v2.18.1/nfpm_amd64.deb && \
     apt install -y ./nfpm_amd64.deb && \
     rm nfpm_amd64.deb
 
-RUN chmod 0777 /opt
-
-COPY package.ubuntu-2204 /package.sh
+COPY package.debian-11 /package.sh
 COPY build.sh .
 ENTRYPOINT ./build.sh

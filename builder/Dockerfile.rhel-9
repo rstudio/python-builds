@@ -1,0 +1,58 @@
+FROM rockylinux:9
+
+ENV OS_IDENTIFIER rhel-9
+
+RUN dnf -y upgrade \
+    && dnf -y install dnf-plugins-core \
+    && dnf config-manager --set-enabled crb \
+    && dnf install -y epel-release \
+    && dnf -y install \
+    autoconf \
+    bluez-libs-devel \
+    bzip2 \
+    bzip2-devel \
+    curl \
+    expat-devel \
+    gcc-c++ \
+    gdbm-devel \
+    git \
+    glibc-devel \
+    gmp-devel \
+    libev-devel \
+    libX11-devel \
+    libdb-devel \
+    libffi-devel \
+    mesa-libGL-devel \
+    ncurses-devel \
+    openssl-devel \
+    readline-devel \
+    sqlite-devel \
+    systemtap-sdt-devel \
+    tcl-devel \
+    tix-devel \
+    tk-devel \
+    valgrind-devel \
+    wget \
+    zlib-devel \
+    rpm-build \
+    readline-devel \
+    make \
+    python37 \
+    python3-pip \
+    && dnf clean all
+
+# Install AWS CLI
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    ./aws/install && \
+    rm -rf aws awscliv2.zip
+
+RUN curl -LO https://github.com/goreleaser/nfpm/releases/download/v2.18.1/nfpm_amd64.rpm && \
+    dnf install -y nfpm_amd64.rpm && \
+    rm nfpm_amd64.rpm
+
+RUN chmod 0777 /opt
+
+COPY package.rhel-9 /package.sh
+COPY build.sh .
+ENTRYPOINT ./build.sh

@@ -1,0 +1,54 @@
+FROM opensuse/leap:15.4
+
+ENV OS_IDENTIFIER opensuse-154
+
+RUN zypper --non-interactive update
+RUN zypper --non-interactive --gpg-auto-import-keys -n install \
+    automake \
+    curl \
+    fdupes \
+    gcc \
+    gcc-c++ \
+    gcc-fortran \
+    gdbm-devel \
+    gettext-tools \
+    gmp-devel \
+    gzip \
+    intltool \
+    libbz2-devel \
+    libexpat-devel \
+    libev-devel \
+    libffi-devel \
+    libnsl-devel \
+    lzma-devel \
+    make \
+    ncurses-devel \
+    netcfg \
+    openssl-devel \
+    pkgconfig \
+    readline-devel \
+    rpm-build \
+    sqlite-devel \
+    tar \
+    wget \
+    xz \
+    zlib-devel \
+    python \
+    python-pip \
+    && zypper clean
+
+# Install AWS CLI
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    ./aws/install && \
+    rm -rf aws awscliv2.zip
+
+RUN curl -LO https://github.com/goreleaser/nfpm/releases/download/v2.18.1/nfpm_amd64.rpm && \
+    zypper --non-interactive --no-gpg-checks install nfpm_amd64.rpm && \
+    rm nfpm_amd64.rpm
+
+RUN chmod 0777 /opt
+
+COPY package.opensuse-154 /package.sh
+COPY build.sh .
+ENTRYPOINT ./build.sh

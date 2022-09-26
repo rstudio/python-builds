@@ -1,0 +1,33 @@
+#!/bin/bash
+
+if [[ ! -d /tmp/output/${OS_IDENTIFIER} ]]; then
+  mkdir -p "/tmp/output/${OS_IDENTIFIER}"
+fi
+
+cat <<EOF > /tmp/nfpm.yml
+name: python-${PYTHON_VERSION}
+version: 1
+version_schema: none
+priority: optional
+maintainer: RStudio, PBC <https://github.com/rstudio/python-builds>
+description: |
+  interactive high-level object-oriented language
+vendor: RStudio, PBC
+homepage: https://www.python.org/
+license: 	GPL-3.0-only
+deb:
+  fields:
+    Bugs: https://github.com/rstudio/python-builds/issues
+depends:
+- libev-dev
+contents:
+- src: /opt/python/${PYTHON_VERSION}
+  dst: /opt/python/${PYTHON_VERSION}
+EOF
+
+nfpm package \
+  -f /tmp/nfpm.yml \
+  -p deb \
+  -t "/tmp/output/${OS_IDENTIFIER}"
+
+export PKG_FILE=$(find "/tmp/output/${OS_IDENTIFIER}" -name 'python*.deb' -or -name 'python*.rpm' | head -1)

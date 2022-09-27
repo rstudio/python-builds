@@ -1,10 +1,11 @@
-FROM rockylinux:8
+FROM rockylinux:9
 
-ENV OS_IDENTIFIER=centos-8
+ENV OS_IDENTIFIER rhel-9
 
 RUN dnf -y upgrade \
     && dnf -y install dnf-plugins-core \
-    && dnf config-manager --set-enabled powertools \
+    && dnf config-manager --set-enabled crb \
+    && dnf install -y epel-release \
     && dnf -y install \
     autoconf \
     bluez-libs-devel \
@@ -36,13 +37,15 @@ RUN dnf -y upgrade \
     rpm-build \
     readline-devel \
     make \
-    python36 \
+    python3 \
     python3-pip \
     && dnf clean all
 
-# Install AWS CLI.
-RUN pip3 install awscli --upgrade --user \
-    && ln -s /root/.local/bin/aws /usr/bin/aws
+# Install AWS CLI
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    ./aws/install && \
+    rm -rf aws awscliv2.zip
 
 RUN curl -LO https://github.com/goreleaser/nfpm/releases/download/v2.18.1/nfpm_amd64.rpm && \
     dnf install -y nfpm_amd64.rpm && \
@@ -50,7 +53,6 @@ RUN curl -LO https://github.com/goreleaser/nfpm/releases/download/v2.18.1/nfpm_a
 
 RUN chmod 0777 /opt
 
-COPY package.centos-8 /package.sh
+COPY package.rhel-9 /package.sh
 COPY build.sh .
 ENTRYPOINT ./build.sh
-

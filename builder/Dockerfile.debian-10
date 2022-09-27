@@ -1,7 +1,6 @@
-FROM ubuntu:bionic
+FROM debian:buster
 
-ENV DEBIAN_FRONTEND=noninteractive
-ENV OS_IDENTIFIER=ubuntu-1804
+ENV OS_IDENTIFIER debian-10
 
 RUN apt-get update && apt-get upgrade -y
 
@@ -9,9 +8,9 @@ RUN apt-get install -y \
   curl \
   gcc \
   libbz2-dev \
+  libev-dev \
   libffi-dev \
   libgdbm-dev \
-  libev-dev \
   liblzma-dev \
   libncurses-dev \
   libreadline-dev \
@@ -21,16 +20,17 @@ RUN apt-get install -y \
   tk-dev \
   wget \
   zlib1g-dev \
-  python-pip
+  python3-pip \
+  python3-venv
 
-RUN pip install awscli
+RUN pip3 install awscli
+
+RUN chmod 0777 /opt
 
 RUN curl -LO https://github.com/goreleaser/nfpm/releases/download/v2.18.1/nfpm_amd64.deb && \
     apt install -y ./nfpm_amd64.deb && \
     rm nfpm_amd64.deb
 
-RUN chmod 0777 /opt
-
-COPY package.ubuntu-1804 /package.sh
+COPY package.debian-10 /package.sh
 COPY build.sh .
 ENTRYPOINT ./build.sh

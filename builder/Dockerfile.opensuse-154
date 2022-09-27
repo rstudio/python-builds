@@ -1,10 +1,9 @@
-FROM opensuse/leap:15.3
+FROM opensuse/leap:15.4
 
-ENV OS_IDENTIFIER=opensuse-153
+ENV OS_IDENTIFIER opensuse-154
 
 RUN zypper --non-interactive update
-
-RUN zypper --non-interactive --gpg-auto-import-keys install \
+RUN zypper --non-interactive --gpg-auto-import-keys -n install \
     automake \
     curl \
     fdupes \
@@ -31,14 +30,20 @@ RUN zypper --non-interactive --gpg-auto-import-keys install \
     rpm-build \
     sqlite-devel \
     tar \
+    unzip \
     wget \
     xz \
+    zip \
     zlib-devel \
-    python \
-    python-pip \
+    python39 \
+    python39-pip \
     && zypper clean
 
-RUN pip install awscli
+# Install AWS CLI
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    ./aws/install && \
+    rm -rf aws awscliv2.zip
 
 RUN curl -LO https://github.com/goreleaser/nfpm/releases/download/v2.18.1/nfpm_amd64.rpm && \
     zypper --non-interactive --no-gpg-checks install nfpm_amd64.rpm && \
@@ -46,6 +51,6 @@ RUN curl -LO https://github.com/goreleaser/nfpm/releases/download/v2.18.1/nfpm_a
 
 RUN chmod 0777 /opt
 
-COPY package.opensuse-153 /package.sh
+COPY package.opensuse-154 /package.sh
 COPY build.sh .
 ENTRYPOINT ./build.sh

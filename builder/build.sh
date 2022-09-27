@@ -58,6 +58,7 @@ compile_python() {
   ./configure \
     --prefix=/opt/python/${VERSION} \
     --enable-shared \
+    --enable-optimizations \
     --enable-ipv6 \
     LDFLAGS=-Wl,-rpath=/opt/python/${VERSION}/lib,--disable-new-dtags
 

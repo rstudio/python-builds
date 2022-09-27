@@ -51,8 +51,6 @@ provider:
       Ref: pythonBuildsBatchJobDefinitionCentos8
     JOB_DEFINITION_ARN_rhel_9:
       Ref: pythonBuildsBatchJobDefinitionRhel9
-    JOB_DEFINITION_ARN_opensuse_42:
-      Ref: pythonBuildsBatchJobDefinitionOpensuse42
     JOB_DEFINITION_ARN_opensuse_153:
       Ref: pythonBuildsBatchJobDefinitionOpensuse153
     JOB_DEFINITION_ARN_opensuse_154:

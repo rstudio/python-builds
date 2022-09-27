@@ -6,7 +6,6 @@ ENV OS_IDENTIFIER=ubuntu-2004
 RUN apt-get update && apt-get upgrade -y
 
 RUN apt-get install -y \
-  curl \
   gcc \
   libbz2-dev \
   libev-dev \

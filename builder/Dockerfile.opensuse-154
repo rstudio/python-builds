@@ -30,11 +30,13 @@ RUN zypper --non-interactive --gpg-auto-import-keys -n install \
     rpm-build \
     sqlite-devel \
     tar \
+    unzip \
     wget \
     xz \
+    zip \
     zlib-devel \
-    python \
-    python-pip \
+    python39 \
+    python39-pip \
     && zypper clean
 
 # Install AWS CLI

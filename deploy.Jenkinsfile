@@ -20,7 +20,7 @@ pipeline {
   stages {
     stage('deploy') {
       steps {
-        withAWS(role:'python-builds-deploy', duration: 7200) {
+        withAWS(role:'python-builds-deploy') {
           sh "make serverless-deploy.${params.ENVIRONMENT}"
         }
       }

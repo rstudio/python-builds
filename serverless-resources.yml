@@ -127,7 +127,7 @@ pythonBuildsBatchComputeEnvironment:
       SecurityGroupIds: ${self:custom.securityGroupIds}
       Subnets: ${self:custom.subnets}
       Type: SPOT
-      BidPercentage: 85
+      BidPercentage: 100
       InstanceRole:
         "Fn::GetAtt": [ pythonBuildsIamInstanceProfile, Arn ]
       InstanceTypes:

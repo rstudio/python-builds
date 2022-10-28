@@ -21,7 +21,7 @@ pipeline {
   stages {
     stage('Break Glass') {
       steps {
-        withAWS(role:'python-builds-deploy') {
+        withAWS(role:'python-builds-deploy', duration: 7200) {
           sh "make break-glass.${params.ENVIRONMENT}"
         }
       }

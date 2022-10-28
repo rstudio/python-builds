@@ -144,7 +144,7 @@ pythonBuildsBatchComputeEnvironment:
       Tags: ${self:provider.stackTags}
       MinvCpus: 0
       DesiredvCpus: 0
-      MaxvCpus: 256
+      MaxvCpus: 1024
 
 pythonBuildsBatchJobQueue:
   Type: AWS::Batch::JobQueue

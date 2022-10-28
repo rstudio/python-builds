@@ -1,14 +1,13 @@
 # python-builds
 
-This repository orchestrates tools to produce Python binaries. The binaries are available as a
-community resource, **they are not professionally supported by RStudio**. 
+This repository orchestrates tools to produce Python binaries. 
 The Python language is open source, please see the official documentation at https://www.python.org/.
 
 These binaries are not a replacement to existing binary distributions for Python.
 The binaries were built with the following considerations:
 - They use a minimal set of [build and runtime dependencies](builder).
 - They are designed to be used side-by-side, e.g., on RStudio Workbench.
-- They give users a consistent option for accessing R across different Linux distributions.
+- They give users a consistent option for accessing Python across different Linux distributions.
 
 Please open an issue to report a specific
 bug, or ask questions on [RStudio Community](https://community.rstudio.com).
@@ -17,9 +16,10 @@ bug, or ask questions on [RStudio Community](https://community.rstudio.com).
 
 Python binaries are built for the following Linux operating systems:
 - Ubuntu 18.04, 20.04, 22.04
+- Debian 10,11
 - CentOS 7
-- Red Hat Enterprise Linux 7, 8
-- openSUSE 15.3
+- Red Hat Enterprise Linux 7, 8, 9
+- openSUSE 15.3, 15.4
 ## Quick Installation
 
 To use our quick install script to install Python, simply run the following

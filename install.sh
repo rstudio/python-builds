@@ -27,25 +27,22 @@ if [[ $(id -u) != "0" ]]; then
 fi
 
 # The root of the S3 URL for downloads
-CDN_URL='https://cdn.rstudio.com/python'
+CDN_URL='https://cdn.posit.co/python'
 
 # The URL for listing available Python versions
 VERSIONS_URL="${CDN_URL}/versions.json"
 
-PYTHON_VERSIONS=$(curl -s ${VERSIONS_URL} | \
+PYTHON_VERSIONS=$(curl -s ${VERSIONS_URL} |
   # Matches the JSON line that contains the python versions
-  grep python_versions | \
+  grep python_versions |
   # Gets the value of the `PYTHON_VERSION` property (e.g., "[ 3.0.0, 3.0.3, ... ]")
-  cut -f2 -d ":" | \
+  cut -f2 -d ":" |
   # Removes the opening and closing brackets of the array
-  cut -f2 -d "[" | cut -f1 -d "]" | \
+  cut -f2 -d "[" | cut -f1 -d "]" |
   # Removes the quotes and commas from the values
-  sed -e 's/\"//g' | sed -e 's/\,//g' | \
-  # Appends a placeholder to the end of the string. Without an extra element at the
-  # end, the last version will be missing after we reverse the order.
-  { IFS= read -r vers; printf '%s placeholder' "$vers"; } | \
-  # Reverses the order of the list
-  ( while read -d ' ' f;do g="$f${g+ }$g" ;done;echo "$g" ))
+  sed -e 's/\"//g' | sed -e 's/\,//g' |
+  # Convert to newlines and sort in descending order, with devel/next at the bottom
+  tr ' ' '\n' | sort --numeric-sort --reverse)
 
 # Returns the OS
 detect_os () {
@@ -276,6 +273,7 @@ install_deb () {
   if [[ "${RUN_UNATTENDED}" -ne "0" ]]; then
       yes="--n"
       yesapt="-y"
+      export DEBIAN_FRONTEND=noninteractive
   fi
   echo "Updating package indexes..."
   ${SUDO} apt-get update
@@ -283,6 +281,7 @@ install_deb () {
   ${SUDO} apt-get install ${yesapt} gdebi-core
   ${SUDO} gdebi ${yes} "${installer_name}"
 }
+
 
 # Installs Python for RHEL/CentOS and SUSE
 install_rpm () {
@@ -350,7 +349,8 @@ install_epel_amzn () {
 
 # Installs EPEL for RHEL/CentOS/Alma/Rocky
 install_epel () {
-  ver=$1
+  os=$1
+  ver=$2
   yes=
   if [[ "${RUN_UNATTENDED}" -ne "0" ]]; then
       yes="-y"
@@ -364,9 +364,18 @@ install_epel () {
       ;;
     "8")
       ;;
+    "9")
+      if [[ "${os}" == "RedHat" ]]; then
+        ${SUDO} subscription-manager repos --enable "codeready-builder-for-rhel-9-$(arch)-rpms"
+        ${SUDO} dnf install ${yes} https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+      else
+        ${SUDO} dnf install ${yes} dnf-plugins-core
+        ${SUDO} dnf config-manager --set-enabled crb
+        ${SUDO} dnf install ${yes} epel-release
+      fi
+      ;;
   esac
 }
-
 # Installs the Python backports repository for SLES 12
 install_python_backports () {
   SLE_VERSION="SLE_$(grep "^VERSION=" /etc/os-release | sed -e 's/VERSION=//' -e 's/"//g' -e 's/-/_/')"

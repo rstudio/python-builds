@@ -42,7 +42,7 @@ PYTHON_VERSIONS=$(curl -s ${VERSIONS_URL} |
   # Removes the quotes and commas from the values
   sed -e 's/\"//g' | sed -e 's/\,//g' |
   # Convert to newlines and sort in descending order, with devel/next at the bottom
-  tr ' ' '\n' | sort --numeric-sort --reverse)
+  tr ' ' '\n' | sort --version-sort --reverse)
 
 # Returns the OS
 detect_os () {

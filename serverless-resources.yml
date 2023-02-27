@@ -334,3 +334,9 @@ pythonBuildsEventRule:
           Fn::GetAtt: [ pythonBuildsEventRuleIamRole, Arn ]
         Arn:
           Ref: PythonBuildsStepFunction
+
+pythonBuildsTopic:
+  Type: AWS::SNS::Topic
+  Properties:
+    DisplayName: Python Builds
+    TopicName: ${self:custom.${self:provider.stage}.snsTopicName}

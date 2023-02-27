@@ -8,6 +8,27 @@ import requests
 PYTHON_SRC_URL = "https://www.python.org/ftp/python/"
 PYTHON_MINOR_VERSIONS = ["3.7", "3.8", "3.9", "3.10", "3.11"]
 batch_client = boto3.client("batch", region_name="us-east-1")
+sns_client = boto3.client('sns', region_name='us-east-1')
+
+
+class JobDetails:
+    def __init__(self, version, platform):
+        self.version = version
+        self.platform = platform
+
+    @classmethod
+    def from_job_name(cls, job_name):
+        _python, version, platform = job_name.split('-', 2)
+        return cls(version.replace('_', '.'), platform)
+
+    def job_name(self):
+        return f"python-{self.version.replace('.', '_')}-{self.platform}"
+
+    def job_definition_arn(self):
+        return os.environ[f"JOB_DEFINITION_ARN_{self.platform.replace('-','_')}"]
+
+    def to_json(self):
+        return {'version': self.version, 'platform': self.platform}
 
 
 def _to_list(input):
@@ -91,25 +112,19 @@ def _container_overrides(version):
 
 def _submit_job(version, platform):
     """Submit a Python build job to AWS Batch."""
-    job_name = "-".join(["python", version, platform])
-    job_name = job_name.replace(".", "_")
-    job_definition_arn = "JOB_DEFINITION_ARN_{}".format(platform.replace("-", "_"))
+    job_details = JobDetails(version, platform)
     args = {
-        "jobName": job_name,
+        "jobName": job_details.job_name(),
         "jobQueue": os.environ["JOB_QUEUE_ARN"],
-        "jobDefinition": os.environ[job_definition_arn],
-        "containerOverrides": _container_overrides(version),
+        "jobDefinition": job_details.job_definition_arn(),
+        "containerOverrides": _container_overrides(job_details.version),
     }
     if os.environ.get("DRYRUN"):
-        print("DRYRUN: would have queued {}".format(job_name))
-        return "dryrun-no-job-{}".format(job_name)
+        print("DRYRUN: would have queued {}".format(job_details.job_name()))
+        return "dryrun-no-job-{}".format(job_details.job_name())
     else:
         response = batch_client.submit_job(**args)
-        print(
-            "Started job for Python:{},Platform:{},id:{}".format(
-                version, platform, response["jobId"]
-            )
-        )
+        print(f'Started job with details:{job_details},id:{response["jobId"]}')
         return response["jobId"]
 
 
@@ -144,4 +159,29 @@ def poll_running_jobs(event, context):
         event["succeededJobIds"]
     )
     event["unfinishedJobCount"] = len(event["jobIds"]) - event["finishedJobCount"]
+    return event
+
+
+def finished(event, _context):
+    """Publish details about successfully finished jobs."""
+
+    # first, if there were no succeeded jobs, return instead of publishing details about builds
+    if len(event['succeededJobIds']) < 1:
+        return event
+
+    # fetch all jobs, removing those which are not in our succeeded id list
+    r = batch_client.list_jobs(jobQueue=os.environ['JOB_QUEUE_ARN'], jobStatus='SUCCEEDED')
+    succeeded_jobs = [i for i in r['jobSummaryList'] if i['jobId'] in event['succeededJobIds']]
+
+    message = {'versions': []}
+
+    for job in succeeded_jobs:
+        details = JobDetails.from_job_name(job['jobName'])
+        message['versions'].append(vars(details))
+
+    response = sns_client.publish(
+        TargetArn=os.environ['SNS_TOPIC_ARN'],
+        Message=json.dumps(message),
+    )
+    print(f'Published to topic, response:{response}')
     return event

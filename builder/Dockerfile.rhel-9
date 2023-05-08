@@ -11,7 +11,6 @@ RUN dnf -y upgrade \
     bluez-libs-devel \
     bzip2 \
     bzip2-devel \
-    curl \
     expat-devel \
     gcc-c++ \
     gdbm-devel \
@@ -39,6 +38,7 @@ RUN dnf -y upgrade \
     make \
     python3 \
     python3-pip \
+    && dnf builddep -y python3 \
     && dnf clean all
 
 # Install AWS CLI

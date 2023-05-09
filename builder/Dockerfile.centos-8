@@ -38,6 +38,7 @@ RUN dnf -y upgrade \
     make \
     python36 \
     python3-pip \
+    && dnf builddep -y python3 \
     && dnf clean all
 
 # Install AWS CLI.

@@ -1,0 +1,46 @@
+name: Break Glass
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "The target environment to deploy to."
+        required: true
+        default: "staging"
+
+env:
+  HOME: "."
+
+jobs:
+  break-glass:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.8"
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y python-pip
+          sudo pip install awscli
+          sudo npm install -g serverless
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+
+      - name: Break Glass
+        run: make break-glass.${{ github.event.inputs.environment }}

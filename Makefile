@@ -31,7 +31,7 @@ rebuild-all: deps
 	$(SLS_BINARY) invoke stepf -n pythonBuilds -d '{"force": true}'
 
 serverless-deploy.%: deps
-	$(SLS_BINARY) deploy --stage $*
+	$(SLS_BINARY) deploy --stage $* --verbose
 
 # This will rebuild all the python binaries, every version, every operating system
 break-glass.%: deps

@@ -11,6 +11,8 @@ package:
     - builder/**
     - docs/**
     - node_modules/**
+    - .npm/**
+    - .cache/**
 
 provider:
   name: aws

@@ -5,6 +5,7 @@
   "devDependencies": {
     "serverless": "^3.30.1",
     "serverless-python-requirements": "^5.4.0",
-    "serverless-step-functions": "^3.13.1"
+    "serverless-step-functions": "^3.13.1",
+    "serverless-pseudo-parameters": "^2.2.0"
   }
 }

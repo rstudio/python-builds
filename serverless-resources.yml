@@ -108,6 +108,10 @@ pythonBuildsEcsLaunchTemplate:
           Ebs:
             VolumeType: gp3
             VolumeSize: 64
+            Encrypted: true
+      MetadataOptions:
+        HttpTokens: required
+        HttpPutResponseHopLimit: 2
 
 pythonBuildsBatchComputeEnvironment:
   Type: AWS::Batch::ComputeEnvironment

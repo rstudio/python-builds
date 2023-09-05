@@ -172,6 +172,7 @@ pythonBuildsBatchJobDefinitionUbuntu1804:
       JobRoleArn:
         "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
       Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:ubuntu-1804"
+      ReadOnlyRootFilesystem: true
     Timeout:
       AttemptDurationSeconds: 7200
 pythonBuildsBatchJobDefinitionUbuntu2004:
@@ -186,6 +187,7 @@ pythonBuildsBatchJobDefinitionUbuntu2004:
       JobRoleArn:
         "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
       Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:ubuntu-2004"
+      ReadOnlyRootFilesystem: true
     Timeout:
       AttemptDurationSeconds: 7200
 pythonBuildsBatchJobDefinitionUbuntu2204:
@@ -200,6 +202,7 @@ pythonBuildsBatchJobDefinitionUbuntu2204:
       JobRoleArn:
         "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
       Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:ubuntu-2204"
+      ReadOnlyRootFilesystem: true
     Timeout:
       AttemptDurationSeconds: 7200
 pythonBuildsBatchJobDefinitionDebian10:
@@ -214,6 +217,7 @@ pythonBuildsBatchJobDefinitionDebian10:
       JobRoleArn:
         "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
       Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:debian-10"
+      ReadOnlyRootFilesystem: true
     Timeout:
       AttemptDurationSeconds: 7200
 pythonBuildsBatchJobDefinitionDebian11:
@@ -228,6 +232,7 @@ pythonBuildsBatchJobDefinitionDebian11:
       JobRoleArn:
         "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
       Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:debian-11"
+      ReadOnlyRootFilesystem: true
     Timeout:
       AttemptDurationSeconds: 7200
 pythonBuildsBatchJobDefinitionCentos7:
@@ -242,6 +247,7 @@ pythonBuildsBatchJobDefinitionCentos7:
       JobRoleArn:
         "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
       Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:centos-7"
+      ReadOnlyRootFilesystem: true
     Timeout:
       AttemptDurationSeconds: 7200
 pythonBuildsBatchJobDefinitionCentos8:
@@ -256,6 +262,7 @@ pythonBuildsBatchJobDefinitionCentos8:
       JobRoleArn:
         "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
       Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:centos-8"
+      ReadOnlyRootFilesystem: true
     Timeout:
       AttemptDurationSeconds: 7200
 pythonBuildsBatchJobDefinitionRhel9:
@@ -270,6 +277,7 @@ pythonBuildsBatchJobDefinitionRhel9:
       JobRoleArn:
         "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
       Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:rhel-9"
+      ReadOnlyRootFilesystem: true
     Timeout:
       AttemptDurationSeconds: 7200
 pythonBuildsBatchJobDefinitionOpensuse153:
@@ -284,6 +292,7 @@ pythonBuildsBatchJobDefinitionOpensuse153:
       JobRoleArn:
         "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
       Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:opensuse-153"
+      ReadOnlyRootFilesystem: true
     Timeout:
       AttemptDurationSeconds: 7200
 pythonBuildsBatchJobDefinitionOpensuse154:
@@ -298,6 +307,7 @@ pythonBuildsBatchJobDefinitionOpensuse154:
       JobRoleArn:
         "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
       Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:opensuse-154"
+      ReadOnlyRootFilesystem: true
     Timeout:
       AttemptDurationSeconds: 7200
 

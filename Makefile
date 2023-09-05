@@ -30,7 +30,13 @@ ecr-login:
 rebuild-all: deps
 	$(SLS_BINARY) invoke stepf -n pythonBuilds -d '{"force": true}'
 
-serverless-deploy.%: deps
+push-serverless-custom-file:
+	aws s3 cp serverless-custom.yml s3://rstudio-devops/python-builds/serverless-custom.yml
+
+fetch-serverless-custom-file:
+	aws s3 cp s3://rstudio-devops/python-builds/serverless-custom.yml .
+
+serverless-deploy.%: deps fetch-serverless-custom-file
 	$(SLS_BINARY) deploy --stage $* --verbose
 
 # This will rebuild all the python binaries, every version, every operating system

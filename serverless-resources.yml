@@ -1,3 +1,11 @@
+pythonBuildsSecurityGroup:
+  Type: AWS::EC2::SecurityGroup
+  Properties:
+    GroupDescription: Security Group for the PythonBuilds jobs
+    GroupName: PythonBuildsJobs
+    VpcId: ${self:custom.vpcId}
+    Tags: ${self:custom.tagsList}
+
 # s3 bucket
 S3Bucket:
   Type: AWS::S3::Bucket
@@ -128,7 +136,8 @@ pythonBuildsBatchComputeEnvironment:
           Ref: pythonBuildsEcsLaunchTemplate
       SpotIamFleetRole:
         "Fn::GetAtt": [ pythonBuildsSpotFleetIamRole, Arn ]
-      SecurityGroupIds: ${self:custom.securityGroupIds}
+      SecurityGroupIds:
+        "Fn::GetAtt": [ pythonBuildsSecurityGroup, GroupId ]
       Subnets: ${self:custom.subnets}
       Type: SPOT
       BidPercentage: 100

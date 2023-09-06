@@ -4,7 +4,7 @@ pythonBuildsSecurityGroup:
     GroupDescription: Security Group for the PythonBuilds jobs
     GroupName: PythonBuildsJobs
     VpcId: ${self:custom.vpcId}
-    Tags: ${self:custom.tagsList}
+    Tags: ${self:provider.stackTags}
 
 # s3 bucket
 S3Bucket:

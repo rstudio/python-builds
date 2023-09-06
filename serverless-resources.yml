@@ -4,7 +4,7 @@ pythonBuildsSecurityGroup:
     GroupDescription: Security Group for the PythonBuilds jobs
     GroupName: PythonBuildsJobs
     VpcId: ${self:custom.vpcId}
-    Tags: ${self:provider.stackTags}
+    Tags: ${self:provider.tagsList}
 
 # s3 bucket
 S3Bucket:
@@ -154,7 +154,7 @@ pythonBuildsBatchComputeEnvironment:
         - c5
         - c5a
       Ec2KeyPair: ${self:custom.ec2KeyPair}
-      Tags: ${self:provider.stackTags}
+      Tags: ${self:provider.tagsMap}
       MinvCpus: 0
       DesiredvCpus: 0
       MaxvCpus: 1024

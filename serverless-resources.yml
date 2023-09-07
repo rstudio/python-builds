@@ -129,6 +129,7 @@ pythonBuildsBatchComputeEnvironment:
     ServiceRole:
       "Fn::GetAtt": [ pythonBuildsBatchIamRole, Arn ]
     ComputeResources:
+      AllocationStrategy: BEST_FIT_PROGRESSIVE
       Ec2Configuration:
         - ImageType: ECS_AL2
       LaunchTemplate:

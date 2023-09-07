@@ -137,7 +137,7 @@ pythonBuildsBatchComputeEnvironment:
       SpotIamFleetRole:
         "Fn::GetAtt": [ pythonBuildsSpotFleetIamRole, Arn ]
       SecurityGroupIds:
-        "Fn::GetAtt": [ pythonBuildsSecurityGroup, GroupId ]
+        - "Fn::GetAtt": [ pythonBuildsSecurityGroup, GroupId ]
       Subnets: ${self:custom.subnets}
       Type: SPOT
       BidPercentage: 100

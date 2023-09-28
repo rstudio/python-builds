@@ -4,9 +4,11 @@ ENV OS_IDENTIFIER=centos-7
 
 # RUN sed -i 's/^enabled=0/enabled=1/g' /etc/yum.repos.d/CentOS-Linux-PowerTools.repo && yum -y update
 
-RUN yum -y install epel-release
+RUN yum -y install epel-release \
+	centos-release-scl
 
 RUN yum -y install \
+  devtoolset-11 \
   autoconf \
   bluez-libs-devel \
   bzip2 \
@@ -53,4 +55,4 @@ RUN chmod 0777 /opt
 
 COPY package.centos-7 /package.sh
 COPY build.sh .
-ENTRYPOINT ./build.sh
+ENTRYPOINT ./build.sh 

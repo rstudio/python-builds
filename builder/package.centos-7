@@ -19,6 +19,7 @@ homepage: https://www.python.org/
 license: 	GPL-3.0-only
 depends:
 - libev-devel
+- openssl11-devel
 contents:
 - src: /opt/python/${PYTHON_VERSION}
   dst: /opt/python/${PYTHON_VERSION}

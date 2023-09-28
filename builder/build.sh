@@ -55,6 +55,12 @@ compile_python() {
   local PYTHON_MAJOR=$(cut -d'.' -f1 <<<$1)
 
   cd /tmp/Python-${VERSION}
+  # special fix for CentOS/RHEL7 to use openssl11
+  . /etc/os-release
+  if [[ $ID$VERSION_ID == "centos7" ]]; then 
+    sed -i 's/PKG_CONFIG openssl /PKG_CONFIG openssl11 /g' configure
+  fi
+
   ./configure \
     --prefix=/opt/python/${VERSION} \
     --enable-shared \
@@ -63,7 +69,7 @@ compile_python() {
     LDFLAGS=-Wl,-rpath=/opt/python/${VERSION}/lib,--disable-new-dtags
 
   make clean
-  make
+  make  
   make install
 }
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 export S3_BUCKET_PREFIX=${S3_BUCKET_PREFIX-""}
 export OS_IDENTIFIER=${OS_IDENTIFIER-"unknown"}
@@ -37,7 +37,8 @@ upload_python() {
 
 # archive_python() - $1 as python version, $2 as target filename
 archive_python() {
-  tar czf /tmp/${2} --directory=/opt/python ${1} --owner=0 --group=0
+        ls -l /opt/python 
+	tar czf /tmp/${2} --directory=/opt/python ${1} --owner=0 --group=0
 }
 
 # fetch_python_source() - $1 as python version
@@ -55,16 +56,25 @@ compile_python() {
   local PYTHON_MAJOR=$(cut -d'.' -f1 <<<$1)
 
   cd /tmp/Python-${VERSION}
-  ./configure \
+  local cmdprefix="bash -c "
+  # special fix for CentOS/RHEL7 to use openssl11
+  linuxdistro=`. /etc/os-release && echo $ID$VERSION_ID`
+  if [[ $linuxdistro == "centos7" ]]; then 
+    sed -i 's/PKG_CONFIG openssl /PKG_CONFIG openssl11 /g' configure
+    cmdprefix="scl enable devtoolset-11 "
+  fi
+ 
+  $cmdprefix "echo ${VERSION}" 
+  $cmdprefix "./configure \
     --prefix=/opt/python/${VERSION} \
     --enable-shared \
     --enable-optimizations \
     --enable-ipv6 \
-    LDFLAGS=-Wl,-rpath=/opt/python/${VERSION}/lib,--disable-new-dtags
+    LDFLAGS=-Wl,-rpath=/opt/python/${VERSION}/lib,--disable-new-dtags"
 
   make clean
-  make
-  make install
+  $cmdprefix 'make'  
+  $cmdprefix 'make install'
 }
 
 package_python() {

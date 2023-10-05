@@ -40,7 +40,7 @@ serverless-deploy.%: deps fetch-serverless-custom-file
 	$(SLS_BINARY) deploy --stage $* --verbose
 
 # This will rebuild all the python binaries, every version, every operating system
-break-glass.%: deps
+break-glass.%: deps fetch-serverless-custom-file
 	$(SLS_BINARY) invoke stepf -n pythonBuilds -d '{"force": true}' --stage $*
 
 # Helper for launching a bash session on a docker image of your choice. Defaults

@@ -60,6 +60,17 @@ services:
     image: python-builds:debian-11
     volumes:
       - ./integration/tmp:/tmp/output
+  debian-12:
+    command: ./build.sh
+    environment:
+      - PYTHON_VERSION=${PYTHON_VERSION}
+      - LOCAL_STORE=/tmp/output
+    build:
+      context: .
+      dockerfile: Dockerfile.debian-12
+    image: python-builds:debian-12
+    volumes:
+      - ./integration/tmp:/tmp/output
   centos-7:
     command: ./build.sh
     environment:

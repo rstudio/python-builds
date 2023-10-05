@@ -1,0 +1,41 @@
+FROM debian:bookworm
+
+ENV OS_IDENTIFIER debian-12
+
+RUN apt-get update && apt-get upgrade -y
+
+RUN apt-get install -y \
+  curl \
+  gcc \
+  libbz2-dev \
+  libev-dev \
+  libffi-dev \
+  libgdbm-dev \
+  liblzma-dev \
+  libncurses-dev \
+  libreadline-dev \
+  libsqlite3-dev \
+  libssl-dev \
+  make \
+  tk-dev \
+  unzip \
+  wget \
+  zlib1g-dev \
+  python3-pip \
+  python3-venv
+
+# Install AWS CLI
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    ./aws/install && \
+    rm -rf aws awscliv2.zip
+
+RUN chmod 0777 /opt
+
+RUN curl -LO https://github.com/goreleaser/nfpm/releases/download/v2.18.1/nfpm_amd64.deb && \
+    apt install -y ./nfpm_amd64.deb && \
+    rm nfpm_amd64.deb
+
+COPY package.debian-11 /package.sh
+COPY build.sh .
+ENTRYPOINT ./build.sh

@@ -325,7 +325,7 @@ install_pre () {
 
   case $os in
     "RedHat" | "CentOS" | "Alma" | "Rocky")
-      install_epel "${ver}"
+      install_epel "${os}" "${ver}"
       ;;
     "Amazon")
       install_epel_amzn

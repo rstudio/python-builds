@@ -1,5 +1,5 @@
 #!/bin/bash
-THIS_VERSION="1.1.0"
+THIS_VERSION="1.1.1"
 
 # Call with:
 #   bash -c "$(curl -L https://rstd.io/python-install)"
@@ -325,7 +325,7 @@ install_pre () {
 
   case $os in
     "RedHat" | "CentOS" | "Alma" | "Rocky")
-      install_epel "${ver}"
+      install_epel "${os}" "${ver}"
       ;;
     "Amazon")
       install_epel_amzn

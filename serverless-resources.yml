@@ -30,20 +30,6 @@ S3BucketPolicy:
           Principal:
             AWS: 'arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity E22AXWZT9RAHBI'
 
-pythonBuildsBatchIamRole:
-  Type: AWS::IAM::Role
-  Properties:
-    Path: /service-role/
-    AssumeRolePolicyDocument:
-      Version: '2012-10-17'
-      Statement:
-        - Effect: Allow
-          Principal:
-            Service:
-              - batch.amazonaws.com
-          Action: sts:AssumeRole
-    ManagedPolicyArns:
-      - arn:aws:iam::aws:policy/service-role/AWSBatchServiceRole
 pythonBuildsSpotFleetIamRole:
   Type: AWS::IAM::Role
   Properties:
@@ -123,11 +109,8 @@ pythonBuildsEcsLaunchTemplate:
 
 pythonBuildsBatchComputeEnvironment:
   Type: AWS::Batch::ComputeEnvironment
-  DependsOn: pythonBuildsBatchIamRole
   Properties:
     Type: MANAGED
-    ServiceRole:
-      "Fn::GetAtt": [ pythonBuildsBatchIamRole, Arn ]
     ComputeResources:
       AllocationStrategy: BEST_FIT_PROGRESSIVE
       Ec2Configuration:
@@ -159,6 +142,7 @@ pythonBuildsBatchComputeEnvironment:
       MinvCpus: 0
       DesiredvCpus: 0
       MaxvCpus: 1024
+      UpdateToLatestImageVersion: true
 
 pythonBuildsBatchJobQueue:
   Type: AWS::Batch::JobQueue

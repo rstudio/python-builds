@@ -19,7 +19,7 @@ Python binaries are built for the following Linux operating systems:
 - Debian 11, 12
 - CentOS 7
 - Red Hat Enterprise Linux 7, 8, 9
-- openSUSE 15.4
+- openSUSE 15.4, 15.5
 
 ## Quick Installation
 

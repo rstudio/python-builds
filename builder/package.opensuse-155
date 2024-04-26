@@ -12,8 +12,8 @@ name: python-${PYTHON_VERSION}
 version: 1
 version_schema: none
 release: 1
-maintainer: RStudio, PBC <https://github.com/rstudio/python-builds>
-vendor: RStudio, PBC
+maintainer: Posit Software, PBC <https://github.com/rstudio/python-builds>
+vendor: Posit Software, PBC
 description: "interactive high-level object-oriented language"
 homepage: https://www.python.org/
 license: 	GPL-3.0-only

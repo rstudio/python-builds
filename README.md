@@ -16,10 +16,11 @@ bug, or ask questions on [RStudio Community](https://community.rstudio.com).
 
 Python binaries are built for the following Linux operating systems:
 - Ubuntu 20.04, 22.04, 24.04
-- Debian 10, 11, 12
+- Debian 11, 12
 - CentOS 7
 - Red Hat Enterprise Linux 7, 8, 9
-- openSUSE 15.3, 15.4
+- openSUSE 15.4
+
 ## Quick Installation
 
 To use our quick install script to install Python, simply run the following
@@ -37,7 +38,7 @@ bash -c "$(curl -L https://rstd.io/python-install)"
 Define the version of Python that you want to install. Available versions
 of Python can be found here: https://cdn.rstudio.com/python/versions.json
 ```bash
-PYTHON_VERSION=3.8.6
+PYTHON_VERSION=3.11.9
 ```
 
 ### Download and install Python
@@ -45,9 +46,6 @@ PYTHON_VERSION=3.8.6
 
 Download the deb package:
 ```bash
-# Ubuntu 18.04
-wget https://cdn.rstudio.com/python/ubuntu-1804/pkgs/python-${PYTHON_VERSION}_1_amd64.deb
-
 # Ubuntu 20.04
 wget https://cdn.rstudio.com/python/ubuntu-2004/pkgs/python-${PYTHON_VERSION}_1_amd64.deb
 
@@ -169,8 +167,8 @@ environment:
   - LOCAL_STORE=/tmp/output # ensures that output tarballs are persisted locally
 build:
   context: .
-  dockerfile: Dockerfile.debian-9
-image: python-builds:debian-9
+  dockerfile: Dockerfile.debian-12
+image: python-builds:debian-12
 volumes:
   - ./integration/tmp:/tmp/output  # path to output tarballs
 ```
@@ -180,7 +178,7 @@ volumes:
 IN `serverless-resources.yml` you'll need to add a job definition that points to the ECR image.
 
 ```
-pythonBuildsBatchJobDefinitionDebian9:
+pythonBuildsBatchJobDefinitionDebian12:
   Type: AWS::Batch::JobDefinition
   Properties:
     Type: container
@@ -191,7 +189,7 @@ pythonBuildsBatchJobDefinitionDebian9:
       Memory: 4096
       JobRoleArn:
         "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
-      Image: #{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:debian-9
+      Image: #{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:debian-12
 ```
 
 ### Environment variables in the serverless.yml functions.
@@ -204,9 +202,9 @@ The serverless functions which trigger Python builds need to be informed of new 
 ```
 environment:
   # snip
-  JOB_DEFINITION_ARN_debian_9:
-    Ref: pythonBuildsBatchJobDefinitionDebian9
-  SUPPORTED_PLATFORMS: ubuntu-1804,debian-9,debian-10,centos-7,centos-8
+  JOB_DEFINITION_ARN_debian_12:
+    Ref: pythonBuildsBatchJobDefinitionDebian12
+  SUPPORTED_PLATFORMS: centos-7,centos-8,debian-12
 ```
 
 ### Makefile
@@ -226,7 +224,7 @@ Periodically, someone with access to these resources may need to re-trigger ever
 serverless invoke stepf -n pythonBuilds -d '{"force": true}'
 
 # Rebuild specific Python versions
-serverless invoke stepf -n pythonBuilds -d '{"force": true, "versions": ["3.6.8", "3.9.10"]}'
+serverless invoke stepf -n pythonBuilds -d '{"force": true, "versions": ["3.10.1", "3.11.9"]}'
 ```
 
 ## Testing
@@ -245,16 +243,16 @@ Then run the build script:
 
 ```bash
 # Build Python for all platforms
-PYTHON_VERSION=3.8.6 make docker-build-python
+PYTHON_VERSION=3.11.9 make docker-build-python
 
 # Build Python for a single platform
-(cd builder && PYTHON_VERSION=3.8.6 docker-compose up ubuntu-2004)
+(cd builder && PYTHON_VERSION=3.11.9 docker-compose up ubuntu-2004)
 
 # Alternatively, run the build script from within a container
 docker run -it --rm --entrypoint "/bin/bash" python-builds:ubuntu-2004
 
-# Build Python 3.8.6
-PYTHON_VERSION=3.8.6 ./build.sh
+# Build Python 3.11.9
+PYTHON_VERSION=3.11.9 ./build.sh
 
 
 # Build a prerelease version of Python (e.g., alpha or beta)

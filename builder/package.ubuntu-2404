@@ -12,10 +12,10 @@ name: python-${PYTHON_VERSION}
 version: 1
 version_schema: none
 priority: optional
-maintainer: Posit, PBC <https://github.com/rstudio/python-builds>
+maintainer: Posit Software, PBC <https://github.com/rstudio/python-builds>
 description: |
   interactive high-level object-oriented language
-vendor: Posit, PBC
+vendor: Posit Software, PBC
 homepage: https://www.python.org/
 license: 	GPL-3.0-only
 deb:

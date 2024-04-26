@@ -37,6 +37,18 @@ services:
     volumes:
       - ./integration/tmp:/tmp/output
 
+  ubuntu-2404:
+    command: ./build.sh
+    environment:
+      - PYTHON_VERSION=${PYTHON_VERSION}
+      - LOCAL_STORE=/tmp/output
+    build:
+      context: .
+      dockerfile: Dockerfile.ubuntu-2404
+    image: python-builds:ubuntu-2404
+    volumes:
+      - ./integration/tmp:/tmp/output
+
   debian-10:
     command: ./build.sh
     environment:

@@ -1,0 +1,37 @@
+FROM ubuntu:noble
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV OS_IDENTIFIER=ubuntu-2404
+
+RUN apt-get update && apt-get upgrade -y
+
+RUN apt-get install -y \
+  curl \
+  gcc \
+  libbz2-dev \
+  libev-dev \
+  libffi-dev \
+  libgdbm-dev \
+  liblzma-dev \
+  libncurses-dev \
+  libreadline-dev \
+  libsqlite3-dev \
+  libssl-dev \
+  make \
+  tk-dev \
+  wget \
+  zlib1g-dev \
+  python3-pip \
+  python3-venv
+
+RUN pip3 install awscli --break-system-packages
+
+RUN curl -LO https://github.com/goreleaser/nfpm/releases/download/v2.18.1/nfpm_amd64.deb && \
+    apt install -y ./nfpm_amd64.deb && \
+    rm nfpm_amd64.deb
+
+RUN chmod 0777 /opt
+
+COPY package.ubuntu-2204 /package.sh
+COPY build.sh .
+ENTRYPOINT ./build.sh

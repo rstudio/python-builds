@@ -15,8 +15,8 @@ bug, or ask questions on [RStudio Community](https://community.rstudio.com).
 ## Supported Platforms
 
 Python binaries are built for the following Linux operating systems:
-- Ubuntu 18.04, 20.04, 22.04
-- Debian 10,11
+- Ubuntu 20.04, 22.04, 24.04
+- Debian 10, 11, 12
 - CentOS 7
 - Red Hat Enterprise Linux 7, 8, 9
 - openSUSE 15.3, 15.4
@@ -53,6 +53,9 @@ wget https://cdn.rstudio.com/python/ubuntu-2004/pkgs/python-${PYTHON_VERSION}_1_
 
 # Ubuntu 22.04
 wget https://cdn.rstudio.com/python/ubuntu-2204/pkgs/python-${PYTHON_VERSION}_1_amd64.deb
+
+# Ubuntu 24.04
+wget https://cdn.rstudio.com/python/ubuntu-2404/pkgs/python-${PYTHON_VERSION}_1_amd64.deb
 ```
 
 Then install the package:

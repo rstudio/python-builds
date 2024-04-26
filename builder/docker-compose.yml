@@ -2,17 +2,6 @@ version: '2.0'
 
 services:
 
-  ubuntu-1804:
-    command: ./build.sh
-    environment:
-      - PYTHON_VERSION=${PYTHON_VERSION}
-      - LOCAL_STORE=/tmp/output
-    build:
-      context: .
-      dockerfile: Dockerfile.ubuntu-1804
-    image: python-builds:ubuntu-1804
-    volumes:
-      - ./integration/tmp:/tmp/output
   ubuntu-2004:
     command: ./build.sh
     environment:
@@ -37,15 +26,15 @@ services:
     volumes:
       - ./integration/tmp:/tmp/output
 
-  debian-10:
+  ubuntu-2404:
     command: ./build.sh
     environment:
       - PYTHON_VERSION=${PYTHON_VERSION}
       - LOCAL_STORE=/tmp/output
     build:
       context: .
-      dockerfile: Dockerfile.debian-10
-    image: python-builds:debian-10
+      dockerfile: Dockerfile.ubuntu-2404
+    image: python-builds:ubuntu-2404
     volumes:
       - ./integration/tmp:/tmp/output
 
@@ -60,6 +49,7 @@ services:
     image: python-builds:debian-11
     volumes:
       - ./integration/tmp:/tmp/output
+
   debian-12:
     command: ./build.sh
     environment:
@@ -71,6 +61,7 @@ services:
     image: python-builds:debian-12
     volumes:
       - ./integration/tmp:/tmp/output
+
   centos-7:
     command: ./build.sh
     environment:
@@ -107,18 +98,6 @@ services:
     volumes:
       - ./integration/tmp:/tmp/output
 
-  opensuse-153:
-    command: ./build.sh
-    environment:
-      - PYTHON_VERSION=${PYTHON_VERSION}
-      - LOCAL_STORE=/tmp/output
-    build:
-      context: .
-      dockerfile: Dockerfile.opensuse-153
-    image: python-builds:opensuse-153
-    volumes:
-      - ./integration/tmp:/tmp/output
-
   opensuse-154:
     command: ./build.sh
     environment:
@@ -128,5 +107,17 @@ services:
       context: .
       dockerfile: Dockerfile.opensuse-154
     image: python-builds:opensuse-154
+    volumes:
+      - ./integration/tmp:/tmp/output
+
+  opensuse-155:
+    command: ./build.sh
+    environment:
+      - PYTHON_VERSION=${PYTHON_VERSION}
+      - LOCAL_STORE=/tmp/output
+    build:
+      context: .
+      dockerfile: Dockerfile.opensuse-155
+    image: python-builds:opensuse-155
     volumes:
       - ./integration/tmp:/tmp/output

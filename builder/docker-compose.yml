@@ -98,18 +98,6 @@ services:
     volumes:
       - ./integration/tmp:/tmp/output
 
-  opensuse-154:
-    command: ./build.sh
-    environment:
-      - PYTHON_VERSION=${PYTHON_VERSION}
-      - LOCAL_STORE=/tmp/output
-    build:
-      context: .
-      dockerfile: Dockerfile.opensuse-154
-    image: python-builds:opensuse-154
-    volumes:
-      - ./integration/tmp:/tmp/output
-
   opensuse-155:
     command: ./build.sh
     environment:

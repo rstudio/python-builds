@@ -114,7 +114,7 @@ pythonBuildsBatchComputeEnvironment:
     ComputeResources:
       AllocationStrategy: BEST_FIT_PROGRESSIVE
       Ec2Configuration:
-        - ImageType: ECS_AL2
+        - ImageType: ECS_AL2023
       LaunchTemplate:
         LaunchTemplateId:
           Ref: pythonBuildsEcsLaunchTemplate

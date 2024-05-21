@@ -165,7 +165,7 @@ pythonBuildsBatchJobDefinitionUbuntu2004:
       Memory: 4096
       JobRoleArn:
         "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
-      Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:ubuntu-2004"
+      Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/python-builds:ubuntu-2004"
     Timeout:
       AttemptDurationSeconds: 7200
 pythonBuildsBatchJobDefinitionUbuntu2204:
@@ -179,7 +179,7 @@ pythonBuildsBatchJobDefinitionUbuntu2204:
       Memory: 4096
       JobRoleArn:
         "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
-      Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:ubuntu-2204"
+      Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/python-builds:ubuntu-2204"
     Timeout:
       AttemptDurationSeconds: 7200
 pythonBuildsBatchJobDefinitionUbuntu2404:
@@ -193,7 +193,7 @@ pythonBuildsBatchJobDefinitionUbuntu2404:
       Memory: 4096
       JobRoleArn:
         "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
-      Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:ubuntu-2404"
+      Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/python-builds:ubuntu-2404"
     Timeout:
       AttemptDurationSeconds: 7200
 pythonBuildsBatchJobDefinitionDebian11:
@@ -207,7 +207,7 @@ pythonBuildsBatchJobDefinitionDebian11:
       Memory: 4096
       JobRoleArn:
         "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
-      Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:debian-11"
+      Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/python-builds:debian-11"
     Timeout:
       AttemptDurationSeconds: 7200
 pythonBuildsBatchJobDefinitionDebian12:
@@ -221,7 +221,7 @@ pythonBuildsBatchJobDefinitionDebian12:
       Memory: 4096
       JobRoleArn:
         "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
-      Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:debian-12"
+      Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/python-builds:debian-12"
     Timeout:
       AttemptDurationSeconds: 7200
 pythonBuildsBatchJobDefinitionCentos7:
@@ -235,7 +235,7 @@ pythonBuildsBatchJobDefinitionCentos7:
       Memory: 4096
       JobRoleArn:
         "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
-      Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:centos-7"
+      Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/python-builds:centos-7"
     Timeout:
       AttemptDurationSeconds: 7200
 pythonBuildsBatchJobDefinitionCentos8:
@@ -249,7 +249,7 @@ pythonBuildsBatchJobDefinitionCentos8:
       Memory: 4096
       JobRoleArn:
         "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
-      Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:centos-8"
+      Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/python-builds:centos-8"
     Timeout:
       AttemptDurationSeconds: 7200
 pythonBuildsBatchJobDefinitionRhel9:
@@ -263,7 +263,7 @@ pythonBuildsBatchJobDefinitionRhel9:
       Memory: 4096
       JobRoleArn:
         "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
-      Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:rhel-9"
+      Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/python-builds:rhel-9"
     Timeout:
       AttemptDurationSeconds: 7200
 
@@ -278,7 +278,7 @@ pythonBuildsBatchJobDefinitionOpensuse155:
       Memory: 4096
       JobRoleArn:
         "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
-      Image: "#{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:opensuse-155"
+      Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/python-builds:opensuse-155"
     Timeout:
       AttemptDurationSeconds: 7200
 

@@ -11,6 +11,7 @@ cat <<EOF > /tmp/nfpm.yml
 name: python-${PYTHON_VERSION}
 version: 1
 version_schema: none
+arch: $(dpkg --print-architecture)
 priority: optional
 maintainer: Posit Software, PBC <https://github.com/rstudio/python-builds>
 description: |

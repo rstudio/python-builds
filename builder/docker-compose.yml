@@ -8,6 +8,8 @@ services:
       - PYTHON_VERSION=${PYTHON_VERSION}
       - LOCAL_STORE=/tmp/output
     build:
+      args:
+        NFPM_VERSION: v2.37.1
       context: .
       dockerfile: Dockerfile.ubuntu-2004
     image: python-builds:ubuntu-2004
@@ -20,6 +22,8 @@ services:
       - PYTHON_VERSION=${PYTHON_VERSION}
       - LOCAL_STORE=/tmp/output
     build:
+      args:
+        NFPM_VERSION: v2.37.1
       context: .
       dockerfile: Dockerfile.ubuntu-2204
     image: python-builds:ubuntu-2204
@@ -32,6 +36,8 @@ services:
       - PYTHON_VERSION=${PYTHON_VERSION}
       - LOCAL_STORE=/tmp/output
     build:
+      args:
+        NFPM_VERSION: v2.37.1
       context: .
       dockerfile: Dockerfile.ubuntu-2404
     image: python-builds:ubuntu-2404
@@ -44,6 +50,8 @@ services:
       - PYTHON_VERSION=${PYTHON_VERSION}
       - LOCAL_STORE=/tmp/output
     build:
+      args:
+        NFPM_VERSION: v2.37.1
       context: .
       dockerfile: Dockerfile.debian-11
     image: python-builds:debian-11
@@ -56,6 +64,8 @@ services:
       - PYTHON_VERSION=${PYTHON_VERSION}
       - LOCAL_STORE=/tmp/output
     build:
+      args:
+        NFPM_VERSION: v2.37.1
       context: .
       dockerfile: Dockerfile.debian-12
     image: python-builds:debian-12
@@ -68,6 +78,8 @@ services:
       - PYTHON_VERSION=${PYTHON_VERSION}
       - LOCAL_STORE=/tmp/output
     build:
+      args:
+        NFPM_VERSION: v2.37.1
       context: .
       dockerfile: Dockerfile.centos-8
     image: python-builds:centos-8
@@ -80,6 +92,8 @@ services:
       - PYTHON_VERSION=${PYTHON_VERSION}
       - LOCAL_STORE=/tmp/output
     build:
+      args:
+        NFPM_VERSION: v2.37.1
       context: .
       dockerfile: Dockerfile.rhel-9
     image: python-builds:rhel-9
@@ -92,6 +106,8 @@ services:
       - PYTHON_VERSION=${PYTHON_VERSION}
       - LOCAL_STORE=/tmp/output
     build:
+      args:
+        NFPM_VERSION: v2.37.1
       context: .
       dockerfile: Dockerfile.opensuse-155
     image: python-builds:opensuse-155

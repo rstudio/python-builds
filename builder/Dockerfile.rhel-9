@@ -1,6 +1,7 @@
 FROM rockylinux:9
 
 ENV OS_IDENTIFIER rhel-9
+ARG NFPM_VERSION=v2.37.1
 
 RUN dnf -y upgrade \
     && dnf -y install dnf-plugins-core \
@@ -47,11 +48,13 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
     ./aws/install && \
     rm -rf aws awscliv2.zip
 
-RUN curl -LO https://github.com/goreleaser/nfpm/releases/download/v2.18.1/nfpm_amd64.rpm && \
-    dnf install -y nfpm_amd64.rpm && \
-    rm nfpm_amd64.rpm
-
 RUN chmod 0777 /opt
+
+RUN if [ "$(arch)" == "aarch64" ]; then echo arm64; else echo amd64; fi > /tmp/arch
+
+RUN curl -LO "https://github.com/goreleaser/nfpm/releases/download/${NFPM_VERSION}/nfpm_$(cat /tmp/arch).rpm" && \
+    dnf install -y "nfpm_$(cat /tmp/arch).rpm" && \
+    rm "nfpm_$(cat /tmp/arch).rpm"
 
 COPY package.rhel-9 /package.sh
 COPY build.sh .

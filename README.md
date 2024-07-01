@@ -17,8 +17,7 @@ bug, or ask questions on [RStudio Community](https://community.rstudio.com).
 Python binaries are built for the following Linux operating systems:
 - Ubuntu 20.04, 22.04, 24.04
 - Debian 11, 12
-- CentOS 7
-- Red Hat Enterprise Linux 7, 8, 9
+- Red Hat Enterprise Linux 8, 9
 - openSUSE 15.5
 
 ## Quick Installation
@@ -64,29 +63,13 @@ sudo gdebi python-${PYTHON_VERSION}_1_amd64.deb
 
 #### RHEL/CentOS Linux
 
-Enable the [Extra Packages for Enterprise Linux](https://fedoraproject.org/wiki/EPEL)
-repository (RHEL/CentOS 7 only):
-
-```bash
-# CentOS / RHEL 7
-sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-```
-
-> Note that on RHEL 7, you may also need to enable the Optional repository:
-> ```bash
-> # For RHEL 7 users with certificate subscriptions:
-> sudo subscription-manager repos --enable "rhel-*-optional-rpms"
->
-> # Or alternatively, using yum:
+> # using yum:
 > sudo yum install yum-utils
 > sudo yum-config-manager --enable "rhel-*-optional-rpms"
 > ```
 
 Download the rpm package:
 ```bash
-# CentOS / RHEL 7
-wget https://cdn.rstudio.com/python/centos-7/pkgs/python-${PYTHON_VERSION}-1-1.x86_64.rpm
-
 # RHEL 8
 wget https://cdn.rstudio.com/python/centos-8/pkgs/python-${PYTHON_VERSION}-1-1.x86_64.rpm
 ```

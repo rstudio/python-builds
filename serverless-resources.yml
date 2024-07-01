@@ -224,20 +224,6 @@ pythonBuildsBatchJobDefinitionDebian12:
       Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/python-builds:debian-12"
     Timeout:
       AttemptDurationSeconds: 7200
-pythonBuildsBatchJobDefinitionCentos7:
-  Type: AWS::Batch::JobDefinition
-  Properties:
-    Type: container
-    ContainerProperties:
-      Command:
-        - ./build.sh
-      Vcpus: 4
-      Memory: 4096
-      JobRoleArn:
-        "Fn::GetAtt": [ pythonBuildsEcsTaskIamRole, Arn ]
-      Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/python-builds:centos-7"
-    Timeout:
-      AttemptDurationSeconds: 7200
 pythonBuildsBatchJobDefinitionCentos8:
   Type: AWS::Batch::JobDefinition
   Properties:

@@ -65,7 +65,7 @@ compile_python() {
     --enable-optimizations \
     --enable-ipv6 \
     ${build_flag} \
-    LDFLAGS=-Wl,-rpath=/opt/python/${VERSION}/lib,--disable-new-dtags"
+    LDFLAGS=-Wl,-rpath=/opt/python/${VERSION}/lib,--disable-new-dtags
 
   make clean
   make

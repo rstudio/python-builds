@@ -1,0 +1,137 @@
+name: Python builds
+
+on:
+  push:
+    paths:
+      - 'builder/**'
+      - 'test/**'
+      - 'Makefile'
+      - '.github/workflows/build.yml'
+  pull_request:
+    paths:
+      - 'builder/**'
+      - 'test/**'
+      - 'Makefile'
+      - '.github/workflows/build.yml'
+  workflow_dispatch:
+    inputs:
+      platforms:
+        description: |
+          Comma-separated list of platforms. Specify "all" to use all platforms (the default).
+        required: false
+        default: 'all'
+        type: string
+      python_versions:
+        description: |
+          Comma-separated list of Python versions. Specify "last-N" to use the
+          last N minor Python versions, or "all" to use all minor Python versions since Python 3.1.
+          Defaults to "last-5,devel".
+        required: false
+        default: 'last-5,devel'
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  setup-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      platforms: ${{ steps.setup-matrix.outputs.platforms }}
+      python_versions: ${{ steps.setup-matrix.outputs.python_versions }}
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up matrix of platforms and R versions
+      id: setup-matrix
+      run: |
+        platforms=$(python test/get_platforms.py ${{ github.event.inputs.platforms }})
+        echo "platforms=$platforms" >> $GITHUB_OUTPUT
+        python_versions=$(python test/get_python_versions.py ${{ github.event.inputs.python_versions }})
+        echo "python_versions=$python_versions" >> $GITHUB_OUTPUT
+
+  docker-images:
+    needs: setup-matrix
+    strategy:
+      matrix:
+        platform: ${{ fromJson(needs.setup-matrix.outputs.platforms) }}
+    runs-on: ubuntu-latest
+    name: Docker image (${{ matrix.platform }})
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        with:
+          install: true
+
+      # Enable Docker layer caching without having to push to a registry.
+      # https://docs.docker.com/build/ci/github-actions/examples/#local-cache
+      # This may eventually be migrated to the GitHub Actions cache backend,
+      # which is still considered experimental.
+      # https://github.com/moby/buildkit#github-actions-cache-experimental
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ matrix.platform }}-buildx-${{ github.sha }}
+          restore-keys: ${{ matrix.platform }}-buildx-
+
+      # Use docker buildx instead of docker-compose here because cache exporting
+      # does not seem to work as of docker-compose v2.6.0 and buildx v0.8.2, even
+      # though it works with buildx individually.
+      - name: Build image
+        run: |
+          docker buildx build -t python-builds:${{ matrix.platform }} \
+            --file builder/Dockerfile.${{ matrix.platform }} \
+            --cache-from "type=local,src=/tmp/.buildx-cache" \
+            --cache-to "type=local,dest=/tmp/.buildx-cache-new,mode=max" \
+            builder
+
+      # Temporary workaround for unbounded GHA cache growth with the local cache mode.
+      # https://github.com/docker/build-push-action/issues/252
+      # https://github.com/moby/buildkit/issues/1896
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+  test:
+    needs: [setup-matrix, docker-images]
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: ${{ fromJson(needs.setup-matrix.outputs.platforms) }}
+        r_version: ${{ fromJson(needs.setup-matrix.outputs.python_versions) }}
+    runs-on: ubuntu-latest
+    name: ${{ matrix.platform }} (Python ${{ matrix.python_version }})
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        with:
+          install: true
+
+      - name: Restore cached Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ matrix.platform }}-buildx-${{ github.sha }}
+          restore-keys: ${{ matrix.platform }}-buildx-
+
+      - name: Load cached Docker image
+        run: |
+          docker buildx build -t python-builds:${{ matrix.platform }} \
+            --file builder/Dockerfile.${{ matrix.platform }} \
+            --cache-from "type=local,src=/tmp/.buildx-cache" \
+            --load \
+            builder
+
+      - name: Build Python
+        run: |
+          PYTHON_VERSION=${{ matrix.python_version }} make build-python-${{ matrix.platform }}
+
+      - name: Test Python
+        run: |
+          PYTHON_VERSION=${{ matrix.python_version }} make test-python-${{ matrix.platform }}

@@ -1,0 +1,65 @@
+services:
+  ubuntu-2004:
+    image: ubuntu:focal
+    command: /python-builds/test/test-apt.sh
+    environment:
+      - OS_IDENTIFIER=ubuntu-2004
+      - PYTHON_VERSION=${PYTHON_VERSION}
+    volumes:
+      - ../:/python-builds
+  ubuntu-2204:
+    image: ubuntu:jammy
+    command: /python-builds/test/test-apt.sh
+    environment:
+      - OS_IDENTIFIER=ubuntu-2204
+      - PYTHON_VERSION=${PYTHON_VERSION}
+    volumes:
+      - ../:/python-builds
+  ubuntu-2404:
+    image: ubuntu:noble
+    command: /python-builds/test/test-apt.sh
+    environment:
+      - OS_IDENTIFIER=ubuntu-2404
+      - PYTHON_VERSION=${PYTHON_VERSION}
+    volumes:
+      - ../:/python-builds
+  debian-12:
+    image: debian:bookworm
+    command: /python-builds/test/test-apt.sh
+    environment:
+      - OS_IDENTIFIER=debian-12
+      - PYTHON_VERSION=${PYTHON_VERSION}
+    volumes:
+      - ../:/python-builds
+  debian-11:
+    image: debian:bullseye
+    command: /python-builds/test/test-apt.sh
+    environment:
+      - OS_IDENTIFIER=debian-11
+      - PYTHON_VERSION=${PYTHON_VERSION}
+    volumes:
+      - ../:/python-builds
+  centos-8:
+    image: rockylinux:8
+    command: /python-builds/test/test-yum.sh
+    environment:
+      - OS_IDENTIFIER=centos-8
+      - PYTHON_VERSION=${PYTHON_VERSION}
+    volumes:
+      - ../:/python-builds
+  rhel-9:
+    image: rockylinux:9
+    command: /python-builds/test/test-yum.sh
+    environment:
+      - OS_IDENTIFIER=rhel-9
+      - PYTHON_VERSION=${PYTHON_VERSION}
+    volumes:
+      - ../:/python-builds
+  opensuse-155:
+    image: opensuse/leap:15.5
+    command: /python-builds/test/test-zypper.sh
+    environment:
+      - OS_IDENTIFIER=opensuse-155
+      - PYTHON_VERSION=${PYTHON_VERSION}
+    volumes:
+      - ../:/python-builds

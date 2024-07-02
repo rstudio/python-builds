@@ -56,25 +56,16 @@ compile_python() {
   local PYTHON_MAJOR=$(cut -d'.' -f1 <<<$1)
 
   cd /tmp/Python-${VERSION}
-  local cmdprefix="bash -c "
-  # special fix for CentOS/RHEL7 to use openssl11
-  linuxdistro=`. /etc/os-release && echo $ID$VERSION_ID`
-  if [[ $linuxdistro == "centos7" ]]; then 
-    sed -i 's/PKG_CONFIG openssl /PKG_CONFIG openssl11 /g' configure
-    cmdprefix="scl enable devtoolset-11 "
-  fi
- 
-  $cmdprefix "echo ${VERSION}" 
-  $cmdprefix "./configure \
+  ./configure \
     --prefix=/opt/python/${VERSION} \
     --enable-shared \
     --enable-optimizations \
     --enable-ipv6 \
-    LDFLAGS=-Wl,-rpath=/opt/python/${VERSION}/lib,--disable-new-dtags"
+    LDFLAGS=-Wl,-rpath=/opt/python/${VERSION}/lib,--disable-new-dtags
 
   make clean
-  $cmdprefix 'make'  
-  $cmdprefix 'make install'
+  make
+  make install
 }
 
 package_python() {

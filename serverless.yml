@@ -64,8 +64,6 @@ provider:
       Ref: pythonBuildsBatchJobDefinitionDebian11
     JOB_DEFINITION_ARN_debian_12:
       Ref: pythonBuildsBatchJobDefinitionDebian12
-    JOB_DEFINITION_ARN_centos_7:
-      Ref: pythonBuildsBatchJobDefinitionCentos7
     JOB_DEFINITION_ARN_centos_8:
       Ref: pythonBuildsBatchJobDefinitionCentos8
     JOB_DEFINITION_ARN_rhel_9:

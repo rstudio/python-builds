@@ -43,6 +43,29 @@ serverless-deploy.%: deps fetch-serverless-custom-file
 break-glass.%: deps fetch-serverless-custom-file
 	$(SLS_BINARY) invoke stepf -n pythonBuilds -d '{"force": true}' --stage $*
 
+define GEN_TARGETS
+docker-build-$(platform):
+	@cd builder && docker-compose build $(platform)
+
+build-python-$(platform):
+	@cd builder && PYTHON_VERSION=$(PYTHON_VERSION) docker-compose run --rm $(platform)
+
+test-python-$(platform):
+	@cd test && PYTHON_VERSION=$(PYTHON_VERSION) docker-compose run --rm $(platform)
+
+bash-$(platform):
+	docker run -it --rm --entrypoint /bin/bash -v $(CURDIR):/python-builds python-builds:$(platform)
+
+.PHONY: docker-build-$(platform) build-python-$(platform) test-python-$(platform) bash-$(platform)
+endef
+
+$(foreach platform,$(PLATFORMS), \
+    $(eval $(GEN_TARGETS)) \
+)
+
+print-platforms:
+	@echo $(PLATFORMS)
+
 # Helper for launching a bash session on a docker image of your choice. Defaults
 # to "ubuntu:focal".
 TARGET_IMAGE?=ubuntu:focal

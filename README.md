@@ -219,7 +219,7 @@ To test the Python builds locally, you can build the images:
 make docker-build
 
 # Or build the image for a single platform
-(cd builder && docker-compose build ubuntu-2004)
+(cd builder && docker compose build ubuntu-2404)
 ```
 
 Then run the build script:
@@ -228,16 +228,15 @@ Then run the build script:
 # Build Python for all platforms
 PYTHON_VERSION=3.11.9 make docker-build-python
 
+# Build pre-release version for all platforms
+PYTHON_VERSION=3.13.0rc3 make docker-build-python
+
 # Build Python for a single platform
-(cd builder && PYTHON_VERSION=3.11.9 docker-compose up ubuntu-2004)
+(cd builder && PYTHON_VERSION=3.11.9 docker compose up ubuntu-2404)
 
 # Alternatively, run the build script from within a container
-docker run -it --rm --entrypoint "/bin/bash" python-builds:ubuntu-2004
+docker run -it --rm --entrypoint "/bin/bash" python-builds:ubuntu-2404
 
 # Build Python 3.11.9
 PYTHON_VERSION=3.11.9 ./build.sh
-
-
-# Build a prerelease version of Python (e.g., alpha or beta)
-PYTHON_VERSION=rc PYTHON_TARBALL_URL=https://www.python.org/ftp/python/3.11.0/Python-3.11.0b3.tgz ./build.sh
 ```

@@ -6,7 +6,7 @@ import os
 import requests
 
 PYTHON_SRC_URL = "https://www.python.org/ftp/python/"
-PYTHON_MINOR_VERSIONS = ["3.8", "3.9", "3.10", "3.11", "3.12"]
+PYTHON_MINOR_VERSIONS = ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
 batch_client = boto3.client("batch", region_name="us-east-1")
 sns_client = boto3.client('sns', region_name='us-east-1')
 

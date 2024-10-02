@@ -96,7 +96,7 @@ wget https://cdn.rstudio.com/python/opensuse-153/pkgs/python-${PYTHON_VERSION}-1
 
 Then install the package:
 ```bash
-sudo zypper --no-gpg-checks install R-${PYTHON_VERSION}-1-1.x86_64.rpm
+sudo zypper --no-gpg-checks install python-${PYTHON_VERSION}-1-1.x86_64.rpm
 ```
 
 ### Verify Python installation

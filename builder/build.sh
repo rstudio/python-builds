@@ -43,12 +43,25 @@ archive_python() {
 
 # fetch_python_source() - $1 as python version
 fetch_python_source() {
-  echo "Downloading python-${1}"
-  wget -q "https://www.python.org/ftp/python/${1}/Python-${1}.tgz" -O /tmp/python-${1}.tgz
-  echo "Extracting python-${1}"
-  tar xf /tmp/python-${1}.tgz -C /tmp
-  rm /tmp/python-${1}.tgz
+  local version="$1"
+
+  # Extract base version before the release candidate identifier (if any)
+  local base_version=$(echo "$version" | sed -E 's/(rc[0-9]+)//')
+
+  # Check if the version includes 'rc' to identify release candidate versions
+  if [[ "$version" =~ rc[0-9]+ ]]; then
+    echo "Downloading Python release candidate version: python-${version}"
+    wget -q "https://www.python.org/ftp/python/${base_version}/Python-${version}.tgz" -O /tmp/python-${version}.tgz
+  else
+    echo "Downloading stable Python version: python-${version}"
+    wget -q "https://www.python.org/ftp/python/${version}/Python-${version}.tgz" -O /tmp/python-${version}.tgz
+  fi
+
+  echo "Extracting python-${version}"
+  tar xf /tmp/python-${version}.tgz -C /tmp
+  rm /tmp/python-${version}.tgz
 }
+
 
 # compile_python() - $1 as python version
 compile_python() {

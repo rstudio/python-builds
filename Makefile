@@ -5,7 +5,7 @@ deps:
 	npm install
 
 docker-build:
-	@cd builder && docker-compose build --parallel
+	@cd builder && docker compose build --parallel
 
 AWS_ACCOUNT_ID:=$(shell aws sts get-caller-identity --output text --query 'Account')
 AWS_REGION := us-east-1
@@ -16,13 +16,13 @@ docker-push: ecr-login docker-build
 	done
 
 docker-down:
-	@cd builder && docker-compose down
+	@cd builder && docker compose down
 
 docker-build-python: docker-build
-	@cd builder && docker-compose up
+	@cd builder && docker compose up
 
 docker-shell-python-env:
-	@cd builder && docker-compose run --entrypoint /bin/bash ubuntu-2004
+	@cd builder && docker compose run --entrypoint /bin/bash ubuntu-2004
 
 ecr-login:
 	(aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com)

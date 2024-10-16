@@ -1,11 +1,12 @@
-FROM node:14
+FROM node:22
 
 ARG JENKINS_UID=386
 ARG JENKINS_GID=386
 ARG DOCKER_GID=999
 
-RUN apt-get update -qq && apt-get install -y python-pip
-RUN pip install awscli
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+  && unzip awscliv2.zip \
+  && ./aws/install
 
 # install docker cli
 RUN wget -q -O /tmp/docker-cli.deb https://download.docker.com/linux/debian/dists/stretch/pool/stable/amd64/docker-ce-cli_18.09.2~3-0~debian-stretch_amd64.deb \

@@ -132,7 +132,7 @@ new platform or inspect an existing platform.
 
 ### Dockerfile
 
-Create a `builder/Dockerfile.platform-version` (where `platform-version` is `ubuntu-2204` or `centos-7`, etc.) This file must contain four major tasks:
+Create a `builder/Dockerfile.platform-version` (where `platform-version` is `ubuntu-2204` or `rhel-9`, etc.) This file must contain four major tasks:
 
 1. an `OS_IDENTIFIER` env with the `platform-version`.
 2. a step which ensures the Python source build dependencies are installed
@@ -187,7 +187,7 @@ environment:
   # snip
   JOB_DEFINITION_ARN_debian_12:
     Ref: pythonBuildsBatchJobDefinitionDebian12
-  SUPPORTED_PLATFORMS: centos-7,centos-8,debian-12
+  SUPPORTED_PLATFORMS: centos-8,debian-12
 ```
 
 ### Makefile

@@ -9,7 +9,7 @@ PYTHON_SRC_URL = "https://www.python.org/ftp/python/"
 PYTHON_MINOR_VERSIONS = ["3.9", "3.10", "3.11", "3.12", "3.13"]
 batch_client = boto3.client("batch", region_name="us-east-1")
 sns_client = boto3.client('sns', region_name='us-east-1')
-
+RETRY_ATTEMPTS = 5
 
 class JobDetails:
     def __init__(self, version, platform):
@@ -109,6 +109,18 @@ def _container_overrides(version):
     ]
     return overrides
 
+def _retry_strategies(retries):
+    """Retry if spot instance is terminated"""
+    strategy = {
+        "attempts": retries,
+        "evaluateOnExit": [
+            {
+                "onStatusReason": "Host EC2 terminated.*",
+                "action": "RETRY"
+             }
+        ]
+    }
+    return strategy
 
 def _submit_job(version, platform):
     """Submit a Python build job to AWS Batch."""
@@ -118,6 +130,7 @@ def _submit_job(version, platform):
         "jobQueue": os.environ["JOB_QUEUE_ARN"],
         "jobDefinition": job_details.job_definition_arn(),
         "containerOverrides": _container_overrides(job_details.version),
+        "retryStrategies": _retry_strategies(RETRY_ATTEMPTS)
     }
     if os.environ.get("DRYRUN"):
         print("DRYRUN: would have queued {}".format(job_details.job_name()))

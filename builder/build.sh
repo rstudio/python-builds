@@ -69,11 +69,15 @@ compile_python() {
   local PYTHON_MAJOR=$(cut -d'.' -f1 <<<$1)
 
   cd /tmp/Python-${VERSION}
+
+  build_flag="--build=$(uname -m)-pc-linux-gnu"
+
   ./configure \
     --prefix=/opt/python/${VERSION} \
     --enable-shared \
     --enable-optimizations \
     --enable-ipv6 \
+    ${build_flag} \
     LDFLAGS=-Wl,-rpath=/opt/python/${VERSION}/lib,--disable-new-dtags
 
   make clean

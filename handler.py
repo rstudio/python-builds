@@ -130,7 +130,7 @@ def _submit_job(version, platform):
         "jobQueue": os.environ["JOB_QUEUE_ARN"],
         "jobDefinition": job_details.job_definition_arn(),
         "containerOverrides": _container_overrides(job_details.version),
-        "retryStrategies": _retry_strategies(RETRY_ATTEMPTS)
+        "retryStrategy": _retry_strategies(RETRY_ATTEMPTS)
     }
     if os.environ.get("DRYRUN"):
         print("DRYRUN: would have queued {}".format(job_details.job_name()))

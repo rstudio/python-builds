@@ -1,10 +1,18 @@
 # python-builds
 
-This repository orchestrates tools to produce Python binaries. 
-The Python language is open source, please see the official documentation at https://www.python.org/.
+> [!IMPORTANT]
+> Posit no longer builds its own Python binaries.
+> Previous Posit-built versions will remain available, but new patch versions for Python 3.9 - 3.13 will not be built.
+> Python 3.14 and later will not be provided.
+> 
+> See: <https://docs.posit.co/resources/install-python-uv.html> for directions on installing standalone Python executables
+
+This repository orchestrates tools to produce Python binaries.
+The Python language is open source, please see the official documentation at <https://www.python.org/>.
 
 These binaries are not a replacement to existing binary distributions for Python.
 The binaries were built with the following considerations:
+
 - They use a minimal set of [build and runtime dependencies](builder).
 - They are designed to be used side-by-side, e.g., on RStudio Workbench.
 - They give users a consistent option for accessing Python across different Linux distributions.
@@ -15,6 +23,7 @@ bug, or ask questions on [RStudio Community](https://community.rstudio.com).
 ## Supported Platforms
 
 Python binaries are built for the following Linux operating systems:
+
 - Ubuntu 20.04, 22.04, 24.04
 - Debian 11, 12
 - Red Hat Enterprise Linux 8, 9
@@ -35,15 +44,18 @@ bash -c "$(curl -L https://rstd.io/python-install)"
 ### Specify Python version
 
 Define the version of Python that you want to install. Available versions
-of Python can be found here: https://cdn.rstudio.com/python/versions.json
+of Python can be found here: <https://cdn.rstudio.com/python/versions.json>
+
 ```bash
 PYTHON_VERSION=3.11.9
 ```
 
 ### Download and install Python
+
 #### Ubuntu/Debian Linux
 
 Download the deb package:
+
 ```bash
 # Ubuntu 20.04
 wget https://cdn.rstudio.com/python/ubuntu-2004/pkgs/python-${PYTHON_VERSION}_1_amd64.deb
@@ -56,6 +68,7 @@ wget https://cdn.rstudio.com/python/ubuntu-2404/pkgs/python-${PYTHON_VERSION}_1_
 ```
 
 Then install the package:
+
 ```bash
 sudo apt-get install gdebi-core
 sudo gdebi python-${PYTHON_VERSION}_1_amd64.deb
@@ -63,18 +76,22 @@ sudo gdebi python-${PYTHON_VERSION}_1_amd64.deb
 
 #### RHEL/CentOS Linux
 
-> # using yum:
+```
+> # using yum
 > sudo yum install yum-utils
 > sudo yum-config-manager --enable "rhel-*-optional-rpms"
+>
 > ```
 
 Download the rpm package:
+
 ```bash
 # RHEL 8
 wget https://cdn.rstudio.com/python/centos-8/pkgs/python-${PYTHON_VERSION}-1-1.x86_64.rpm
 ```
 
 Then install the package:
+
 ```bash
 sudo yum install python-${PYTHON_VERSION}-1-1.x86_64.rpm
 ```
@@ -82,6 +99,7 @@ sudo yum install python-${PYTHON_VERSION}-1-1.x86_64.rpm
 #### SUSE Linux
 
 Enable the Python backports repository (SLES 12 only):
+
 ```bash
 # SLES 12
 VERSION="SLE_$(grep "^VERSION=" /etc/os-release | sed -e 's/VERSION=//' -e 's/"//g' -e 's/-/_/')"
@@ -89,12 +107,14 @@ sudo zypper --gpg-auto-import-keys addrepo https://download.opensuse.org/reposit
 ```
 
 Download the rpm package:
+
 ```bash
 # openSUSE 15.3 / SLES 15 SP3
 wget https://cdn.rstudio.com/python/opensuse-153/pkgs/python-${PYTHON_VERSION}-1-1.x86_64.rpm
 ```
 
 Then install the package:
+
 ```bash
 sudo zypper --no-gpg-checks install python-${PYTHON_VERSION}-1-1.x86_64.rpm
 ```
@@ -102,6 +122,7 @@ sudo zypper --no-gpg-checks install python-${PYTHON_VERSION}-1-1.x86_64.rpm
 ### Verify Python installation
 
 Test that Python was successfully installed by running:
+
 ```bash
 /opt/python/${PYTHON_VERSION}/bin/python --version
 ```
@@ -128,7 +149,7 @@ This repository orchestrates builds using a variety of tools. The
 instructions below outline the components in the stack and describe how to add a
 new platform or inspect an existing platform.
 
-## Adding a new platform:
+## Adding a new platform
 
 ### Dockerfile
 
@@ -175,7 +196,7 @@ pythonBuildsBatchJobDefinitionDebian12:
       Image: #{AWS::AccountId}.dkr.ecr.#{AWS::Region}.amazonaws.com/python-builds:debian-12
 ```
 
-### Environment variables in the serverless.yml functions.
+### Environment variables in the serverless.yml functions
 
 The serverless functions which trigger Python builds need to be informed of new platforms.
 
